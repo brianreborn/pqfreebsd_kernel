@@ -2,8 +2,8 @@
 
 **Copyright © 2026 Brian Fundakowski Feldman.**  
 **License: [Light-ware](LICENSE).** See **[NOTICE.md](NOTICE.md)**.  
-**Release notes:** see **[RELNOTES](RELNOTES)** (FreeBSD-style; half-install
-continuity and master placement).  
+**Release notes:** [RELNOTES](RELNOTES.md) (pointer) — canonical FreeBSD-style
+file is [`RELNOTES`](RELNOTES).
 
 **Sprint expenses:** see **[USAGE.md](USAGE.md)** (from session `/usage`
 telemetry).
@@ -21,10 +21,9 @@ Tiny FreeBSD KLDs for PQFreeBSD (**pqk**). **Not LLM-dependent.** **pqf skills**
 (the PQFreeBSD skill suite) use installed `.ko` files; they do not build this
 tree on demand.
 
-Manuals:
-.Xr-style pages under
-`man/man4/pqfreebsd.4` and
-`man/man4/pqfreebsd_compat_zfs_multilabel.4`
+**Manuals:** [GitHub-readable](man/README.md). Canonical mdoc:
+[`pqfreebsd.4`](man/man4/pqfreebsd.4),
+[`pqfreebsd_compat_zfs_multilabel.4`](man/man4/pqfreebsd_compat_zfs_multilabel.4)
 (`mandoc -T ascii man/man4/pqfreebsd.4`).
 
 ## Required vs optional

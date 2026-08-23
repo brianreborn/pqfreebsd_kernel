@@ -48,9 +48,9 @@ against the TUI if your billing sheet uses a different tick scale.
 
 ## Estimated expense
 
-| | |
+| Item | Value |
 | --- | --- |
-| **Estimated USD (ticks/1e9)** | **~$59.05** |
+| Estimated USD (ticks/1e9) | ~$59.05 |
 | Raw `costUsdTicks` (sum) | 59,049,127,920 |
 | Alternate if ticks were 1e-8 USD | ~$590.49 (unlikely given cache-heavy mix) |
 
