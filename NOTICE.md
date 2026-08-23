@@ -24,17 +24,23 @@ Required acknowledgement in advertising (clause 3):
 
 ## Purpose
 
-Compat workarounds for **trivial host bugs** that would otherwise block
-PQFreeBSD (today: ZFS not advertising `MNT_MULTILABEL`). The proper fix is
-upstream. These KLDs exist so PQFreeBSD can keep working **without** asking
-operators to perform special steps or compromise suite functionality.
+- **`pqfreebsd.ko`** — core suite state (enforcement / audit), transparency,
+  audit trail. Does not load other KLDs; does not implement feature policy.
+- **`pqfreebsd_compat_*`** — accommodations for **trivial host bugs** (today:
+  ZFS not advertising `MNT_MULTILABEL`). Proper fix is upstream. Critical
+  feature work will also land as sibling modules, not in the core.
 
-**Now:** mid-install blocker while validating a PQFreeBSD host. Related
-pain (e.g. `su` failing) is tracked as a separate symptom that may clear once
-labels stick on ZFS — not as a second responsibility of this module.
+These KLDs exist so PQFreeBSD can keep working **without** asking operators
+to perform special steps or compromise suite functionality.
+
+**Now:** multilabel compat is a mid-install blocker while validating a
+PQFreeBSD host. Related pain (e.g. `su` failing) is a separate symptom that
+may clear once labels stick on ZFS — not a second responsibility of that
+compat module.
 
 ## Integration policy
 
 Separate kernel deliverable — not vendored into create-skill trees, not
-built on demand by skills. PQFreeBSD loads installed `.ko` files quietly
-from `onestart`. Do not have unrelated projects integrate this tree yet.
+built on demand by skills. The **userland suite** loads installed `.ko`
+files quietly from `onestart`; the core module does **not** load compat
+KLDs. Do not have unrelated projects integrate this tree yet.
