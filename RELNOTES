@@ -82,3 +82,8 @@ c7b313101c0c:
 	dsl_prop_get_integer (not exported from zfs.ko).  ZFS mounts
 	get MNT_MULTILABEL unless noxattr is set; OpenZFS default is
 	xattr on.  See pqfreebsd_compat_zfs_multilabel(4).
+
+d77121446d2a:
+	Add tools/kldtest.sh for local same-session load testing
+	(build, then kldload(8) if root).  Does not write loader.conf
+	or change xattr=.  See pqfreebsd(4).
