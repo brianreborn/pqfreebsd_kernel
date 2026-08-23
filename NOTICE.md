@@ -28,9 +28,9 @@ Required acknowledgement in advertising (clause 3):
   state (enforcement / audit), transparency, audit trail. Does not load
   other KLDs; does not implement feature policy.
 - **`pqfreebsd_*` siblings** — any number may be required **to enable** a
-  given path (compat for host bugs, later critical features). None are
-  required merely to load the skeleton. Today:
-  `pqfreebsd_compat_zfs_multilabel` (ZFS `MNT_MULTILABEL`; proper fix upstream).
+  given path. None are required merely to load the skeleton. Today:
+  `pqfreebsd_compat_zfs_multilabel` is **ZFS-only** (UFS/FFS already has
+  `MNT_MULTILABEL`; proper fix for ZFS is upstream).
 
 These KLDs exist so PQFreeBSD can keep working **without** asking operators
 to perform special steps or compromise suite functionality.

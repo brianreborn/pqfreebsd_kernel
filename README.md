@@ -18,11 +18,12 @@ hard baseline is the skeleton.
 
 ## Current status (blocker)
 
-**`pqfreebsd_compat_zfs_multilabel` is a live mid-install blocker for
-[pqfreebsd](https://github.com/brianreborn/pqfreebsd).** OpenZFS mounts do not
-set `MNT_MULTILABEL` (UFS does), so MAC labels as EAs do not work until this
-compat KLD (or an upstream fix) is in place. We are mid-install and checking
-for bugs of this class.
+**On ZFS hosts, `pqfreebsd_compat_zfs_multilabel` is a live mid-install blocker
+for [pqfreebsd](https://github.com/brianreborn/pqfreebsd).** OpenZFS mounts do
+not set `MNT_MULTILABEL` (UFS/FFS do — and did before ZFS introduced this
+regression), so MAC labels as EAs on ZFS do not work until this compat KLD (or
+an upstream fix) is in place. A pure UFS/FFS system does **not** need this
+module. We are mid-install on ZFS and checking for bugs of this class.
 
 **Also seen on the same box:** `su` (and similar) are broken. That is **not
 directly** the multilabel bug. It may clear once labels can stick on ZFS; do
@@ -37,13 +38,13 @@ quietly from `onestart`. The **core module does not load compat KLDs**.
 | Module | Role |
 | --- | --- |
 | `pqfreebsd` | **Required** skeletal core. Suite **enforcement** / **audit** state (`security.pqfreebsd.*`); kernel messages on change. Does **not** load other `pqfreebsd_*` KLDs. |
-| `pqfreebsd_compat_zfs_multilabel` | **Optional until ZFS MAC labels are needed.** Bug accommodation: `MNT_MULTILABEL` on ZFS with effective `xattr=on`/`dir` or `sa`. `MODULE_DEPEND`s on `pqfreebsd` + `zfsctrl`. Suite loads it, not the core. |
+| `pqfreebsd_compat_zfs_multilabel` | **ZFS-only.** Not needed on legacy **UFS/FFS** — those already set `MNT_MULTILABEL` (the store predated ZFS and never had this regression). On ZFS: set `MNT_MULTILABEL` when effective `xattr` is `on`/`dir` or `sa`. `MODULE_DEPEND`s on `pqfreebsd` + `zfsctrl`. Suite loads it only when ZFS is in play. |
 
 ```
-pqfreebsd.ko                    ← ONLY module always required
- ├── optional dependents (MODULE_DEPEND on pqfreebsd; suite loads)
-│   pqfreebsd_compat_zfs_multilabel.ko
-│   pqfreebsd_* …               ← any number, as enablement needs
+pqfreebsd.ko                    ← ONLY module always required (UFS or ZFS)
+ ├── optional dependents (MODULE_DEPEND on pqfreebsd; suite loads as needed)
+│   pqfreebsd_compat_zfs_multilabel.ko   ← ZFS hosts only
+│   pqfreebsd_* …
 ```
 
 ### Core sysctls
