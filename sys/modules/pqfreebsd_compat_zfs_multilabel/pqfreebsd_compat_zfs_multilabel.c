@@ -26,12 +26,11 @@
 #include <sys/eventhandler.h>
 #include <sys/syslog.h>
 
+#include "pqfreebsd_zfs_prop.h"
+
 /* OpenZFS xattr index values; avoid CDDL headers. */
 #define	PQFREEBSD_XATTR_DIR	1
 #define	PQFREEBSD_XATTR_SA	2
-
-/* From zfs.ko (zfsctrl). Effective prop; may sleep on spa_namespace_lock. */
-int dsl_prop_get_integer(const char *, const char *, uint64_t *, char *);
 
 static eventhandler_tag pqfreebsd_vfs_mounted_tag;
 

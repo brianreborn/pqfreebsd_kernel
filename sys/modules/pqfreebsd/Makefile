@@ -1,4 +1,5 @@
-# Copyright (c) 2026 Brian Fundakowski Feldman. Light-ware License — see LICENSE.
+# Copyright (c) 2026 Brian Fundakowski Feldman.
+# Light-ware License — see LICENSE.
 
 .if !defined(SYSDIR)
 SYSDIR?=	/usr/src/sys

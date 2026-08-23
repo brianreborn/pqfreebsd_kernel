@@ -21,3 +21,4 @@ opt_*.h
 *.s
 compile/
 obj/
+man/mandoc.db

@@ -1,4 +1,5 @@
-# Copyright (c) 2026 Brian Fundakowski Feldman. Light-ware License — see LICENSE.
+# Copyright (c) 2026 Brian Fundakowski Feldman.
+# Light-ware License — see LICENSE.
 #
 # Top-level build for pqfreebsd_kernel.
 #
@@ -11,6 +12,7 @@
 #
 # Test-build with make clean all before check-in. Intended for recent
 # FreeBSD -RELEASE lines without per-release ifdefs for this VFS surface.
+# Style: sh tools/checkstyle.sh  (checkstyle9.pl, git diff --check, mandoc lint)
 
 .if defined(SYSDIR)
 .MAKEFLAGS: SYSDIR=${SYSDIR}
