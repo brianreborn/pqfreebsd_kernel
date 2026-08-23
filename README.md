@@ -1,7 +1,10 @@
 # pqfreebsd_kernel
 
 **Copyright © 2026 Brian Fundakowski Feldman.**  
-**License: [Light-ware](LICENSE).** See **[NOTICE.md](NOTICE.md)**.
+**License: [Light-ware](LICENSE).** See **[NOTICE.md](NOTICE.md)**.  
+**Release / install continuity:** see **[RELEASE_NOTES.md](RELEASE_NOTES.md)**
+(half-installed PQFreeBSD test host; where a master project should place this
+tree).
 
 Tiny FreeBSD KLDs for PQFreeBSD. Skills do not build this tree on demand.
 
