@@ -8,6 +8,9 @@
 # SYSDIR defaults to /usr/src/sys. Override if your FreeBSD source is elsewhere:
 #
 #   make SYSDIR=/path/to/sys
+#
+# Test-build with make clean all before check-in. Intended for recent
+# FreeBSD -RELEASE lines without per-release ifdefs for this VFS surface.
 
 .if defined(SYSDIR)
 .MAKEFLAGS: SYSDIR=${SYSDIR}

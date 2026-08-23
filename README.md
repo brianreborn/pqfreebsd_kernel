@@ -35,6 +35,14 @@ create-skill trees; it is a separate kernel deliverable.
 | `pqfreebsd` | Core KLD. Compat modules depend on this. |
 | `pqfreebsd_compat_zfs_multilabel` | On load and on each new mount, set `MNT_MULTILABEL` on ZFS mounts whose effective `xattr` is `on`/`dir` or `sa` (local or inherited). |
 
+## Compatibility
+
+Targets **recent FreeBSD -RELEASE** lines of the last several years (practically
+13/14/15-era). The VFS pieces used here (`mountlist` / `vfs_busy` /
+`MNT_ILOCK` / `MNT_MULTILABEL` / `vfs_mounted` / `dsl_prop_get_integer`) have
+been stable for a long time; these modules are not expected to need per-release
+ifdefs for that surface. Always build against the host’s own `sys` tree.
+
 ## Build / install
 
 Ordinary out-of-tree kmod (needs `SYSDIR` / `/usr/src/sys`):
@@ -45,6 +53,10 @@ cd pqfreebsd_kernel
 make                          # or: make SYSDIR=/path/to/sys
 make install                  # puts .ko on the module path
 ```
+
+**Before check-in:** `make clean all` (and, when a second tree is handy, also
+`make SYSDIR=/path/to/other/sys clean all`) and only then commit. Do not push
+untested `.c` changes.
 
 Once installed, PQFreeBSD loads them from `service pqfreebsd onestart` — no
 hand `kldload` ritual for the operator. Optional `loader.conf(5)` if you want
