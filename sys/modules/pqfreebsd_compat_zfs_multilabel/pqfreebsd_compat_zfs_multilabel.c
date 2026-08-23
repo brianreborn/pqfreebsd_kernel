@@ -9,6 +9,10 @@
  * MNT_MULTILABEL so MAC can store labels as EAs. Suite loads this only when
  * ZFS is in play — not on pure UFS/FFS. su/login oddities are not this
  * module's job; they may clear once labels can stick.
+ *
+ * Eventhandler teardown follows siftr(4)/alq(9): drop the handler in
+ * MOD_QUIESCE before MOD_UNLOAD so callbacks cannot race module teardown.
+ * Mount walk matches g_journal / suspend_all_fs locking.
  */
 
 #include <sys/param.h>
@@ -112,6 +116,16 @@ on_vfs_mounted(void *arg __unused, struct mount *mp,
 	tag_mount(mp);
 }
 
+static void
+pqfreebsd_compat_zfs_multilabel_stop(void)
+{
+
+	if (pqfreebsd_vfs_mounted_tag != NULL) {
+		EVENTHANDLER_DEREGISTER(vfs_mounted, pqfreebsd_vfs_mounted_tag);
+		pqfreebsd_vfs_mounted_tag = NULL;
+	}
+}
+
 static int
 pqfreebsd_compat_zfs_multilabel_modevent(module_t mod __unused, int type,
     void *data __unused)
@@ -119,6 +133,10 @@ pqfreebsd_compat_zfs_multilabel_modevent(module_t mod __unused, int type,
 
 	switch (type) {
 	case MOD_LOAD:
+		/*
+		 * Register before the scan so mounts that appear during the
+		 * walk are still covered by the handler.
+		 */
 		pqfreebsd_vfs_mounted_tag = EVENTHANDLER_REGISTER(vfs_mounted,
 		    on_vfs_mounted, NULL, EVENTHANDLER_PRI_ANY);
 		if (pqfreebsd_vfs_mounted_tag == NULL)
@@ -126,14 +144,13 @@ pqfreebsd_compat_zfs_multilabel_modevent(module_t mod __unused, int type,
 		scan_zfs_mounts();
 		printf("pqfreebsd_compat_zfs_multilabel: loaded\n");
 		return (0);
-	case MOD_UNLOAD:
-		if (pqfreebsd_vfs_mounted_tag != NULL) {
-			EVENTHANDLER_DEREGISTER(vfs_mounted,
-			    pqfreebsd_vfs_mounted_tag);
-			pqfreebsd_vfs_mounted_tag = NULL;
-		}
-		return (0);
+	case MOD_QUIESCE:
 	case MOD_SHUTDOWN:
+		pqfreebsd_compat_zfs_multilabel_stop();
+		return (0);
+	case MOD_UNLOAD:
+		/* Idempotent if QUIESCE already ran. */
+		pqfreebsd_compat_zfs_multilabel_stop();
 		return (0);
 	default:
 		return (EOPNOTSUPP);

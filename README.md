@@ -61,8 +61,19 @@ pqfreebsd.ko                    ← ONLY module always required (UFS or ZFS)
 
 | Sysctl | Default | Effect today |
 | --- | --- | --- |
-| `security.pqfreebsd.enforcement` | `0` | On change: `pqfreebsd: enforcement enabled\|disabled` |
-| `security.pqfreebsd.audit` | `0` | On change: `pqfreebsd: audit enabled\|disabled` |
+| `security.pqfreebsd.enforcement` | `0` (RWTUN) | On change: `pqfreebsd: enforcement enabled\|disabled` |
+| `security.pqfreebsd.audit` | `0` (RWTUN) | On change: `pqfreebsd: audit enabled\|disabled` |
+
+### Hygiene (vs shipped KLDs)
+
+Checked against patterns from `mac_seeotheruids` / `mac_ifoff` (sysctl flags),
+`siftr` / `alq` (`MOD_QUIESCE` before teardown), and `g_journal` /
+`suspend_all_fs` (mountlist + `vfs_busy`):
+
+- No `MTX_SYSINIT` in the core for flag ints (plain ints + `SYSCTL_PROC` log).
+- Compat drops `vfs_mounted` in `MOD_QUIESCE` / `MOD_SHUTDOWN`, not only unload.
+- Core does not `kldload` siblings; `MODULE_DEPEND` orders dependents.
+- Register the mount handler **before** the initial scan.
 
 ## Compatibility
 
