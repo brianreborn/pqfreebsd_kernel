@@ -10,19 +10,22 @@ the `.ko` later; do not vendor this tree into other projects yet.
 
 | Module | Role |
 | --- | --- |
-| `pqk_zfs_ea` | On load and on each new mount, set `MNT_MULTILABEL` on ZFS mounts with effective `xattr=on`/`dir` or `xattr=sa` (local or inherited). |
+| `pqfreebsd` | Core KLD. Compat modules depend on this. |
+| `pqfreebsd_compat_zfs_multilabel` | On load and on each new mount, set `MNT_MULTILABEL` on ZFS mounts with effective `xattr=on`/`dir` or `xattr=sa` (local or inherited). |
 
 ## Build / load
 
 ```sh
 make                          # or: make SYSDIR=/path/to/sys
 kldload zfs                   # if needed
-kldload ./sys/modules/pqk_zfs_ea/pqk_zfs_ea.ko
+kldload ./sys/modules/pqfreebsd/pqfreebsd.ko
+kldload ./sys/modules/pqfreebsd_compat_zfs_multilabel/pqfreebsd_compat_zfs_multilabel.ko
 ```
 
 ```
 # loader.conf
-pqk_zfs_ea_load="YES"
+pqfreebsd_load="YES"
+pqfreebsd_compat_zfs_multilabel_load="YES"
 ```
 
 Pin: `git ls-remote https://github.com/brianreborn/pqfreebsd_kernel.git HEAD`

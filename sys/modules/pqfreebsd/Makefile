@@ -4,7 +4,7 @@
 SYSDIR?=	/usr/src/sys
 .endif
 
-KMOD=	pqk_zfs_ea
-SRCS=	pqk_zfs_ea.c
+KMOD=	pqfreebsd
+SRCS=	pqfreebsd.c
 
 .include <bsd.kmod.mk>

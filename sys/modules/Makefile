@@ -7,6 +7,7 @@
 .MAKEFLAGS: SYSDIR=${SYSDIR}
 .endif
 
-SUBDIR=	pqk_zfs_ea
+SUBDIR=	pqfreebsd \
+	pqfreebsd_compat_zfs_multilabel
 
 .include <bsd.subdir.mk>

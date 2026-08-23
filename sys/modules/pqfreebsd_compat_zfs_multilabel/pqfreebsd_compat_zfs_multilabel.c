@@ -99,7 +99,8 @@ on_vfs_mounted(void *arg __unused, struct mount *mp,
 }
 
 static int
-pqk_zfs_ea_modevent(module_t mod __unused, int type, void *data __unused)
+pqfreebsd_compat_zfs_multilabel_modevent(module_t mod __unused, int type,
+    void *data __unused)
 {
 
 	switch (type) {
@@ -109,7 +110,7 @@ pqk_zfs_ea_modevent(module_t mod __unused, int type, void *data __unused)
 		if (pqk_mounted_tag == NULL)
 			return (ENOMEM);
 		scan_zfs_mounts();
-		printf("pqk_zfs_ea: loaded\n");
+		printf("pqfreebsd_compat_zfs_multilabel: loaded\n");
 		return (0);
 	case MOD_UNLOAD:
 		if (pqk_mounted_tag != NULL) {
@@ -124,12 +125,14 @@ pqk_zfs_ea_modevent(module_t mod __unused, int type, void *data __unused)
 	}
 }
 
-static moduledata_t pqk_zfs_ea_mod = {
-	"pqk_zfs_ea",
-	pqk_zfs_ea_modevent,
+static moduledata_t pqfreebsd_compat_zfs_multilabel_mod = {
+	"pqfreebsd_compat_zfs_multilabel",
+	pqfreebsd_compat_zfs_multilabel_modevent,
 	NULL
 };
 
-DECLARE_MODULE(pqk_zfs_ea, pqk_zfs_ea_mod, SI_SUB_VFS, SI_ORDER_ANY);
-MODULE_VERSION(pqk_zfs_ea, 1);
-MODULE_DEPEND(pqk_zfs_ea, zfsctrl, 1, 1, 1);
+DECLARE_MODULE(pqfreebsd_compat_zfs_multilabel,
+    pqfreebsd_compat_zfs_multilabel_mod, SI_SUB_VFS, SI_ORDER_ANY);
+MODULE_VERSION(pqfreebsd_compat_zfs_multilabel, 1);
+MODULE_DEPEND(pqfreebsd_compat_zfs_multilabel, pqfreebsd, 1, 1, 1);
+MODULE_DEPEND(pqfreebsd_compat_zfs_multilabel, zfsctrl, 1, 1, 1);
