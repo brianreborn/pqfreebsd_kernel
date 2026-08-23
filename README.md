@@ -10,7 +10,7 @@ the `.ko` later; do not vendor this tree into other projects yet.
 
 | Module | Role |
 | --- | --- |
-| `pqk_zfs_ea` | On load, set `MNT_MULTILABEL` on ZFS mounts with effective `xattr=on`/`dir` or `xattr=sa` (local or inherited). |
+| `pqk_zfs_ea` | On load and on each new mount, set `MNT_MULTILABEL` on ZFS mounts with effective `xattr=on`/`dir` or `xattr=sa` (local or inherited). |
 
 ## Build / load
 

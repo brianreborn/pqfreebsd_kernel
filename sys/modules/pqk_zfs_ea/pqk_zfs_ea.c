@@ -2,8 +2,8 @@
  * Copyright (c) 2026 Brian Fundakowski Feldman. All rights reserved.
  * Light-ware License — see LICENSE at the repository root.
  *
- * On load: for each ZFS mount with effective xattr on/dir or sa
- * (local or inherited), set MNT_MULTILABEL so MAC can use EAs.
+ * On load and on each new mount: for ZFS with effective xattr on/dir or
+ * sa (local or inherited), set MNT_MULTILABEL so MAC can use EAs.
  */
 
 #include <sys/param.h>
@@ -14,6 +14,7 @@
 #include <sys/mutex.h>
 #include <sys/mount.h>
 #include <sys/queue.h>
+#include <sys/eventhandler.h>
 
 /* OpenZFS xattr index values; avoid CDDL headers. */
 #define	PQK_XATTR_DIR	1
@@ -21,6 +22,8 @@
 
 /* From zfs.ko (zfsctrl). Effective prop; may sleep on spa_namespace_lock. */
 int dsl_prop_get_integer(const char *, const char *, uint64_t *, char *);
+
+static eventhandler_tag pqk_mounted_tag;
 
 static int
 opt_isset(struct mount *mp, const char *name)
@@ -55,6 +58,8 @@ static void
 tag_mount(struct mount *mp)
 {
 
+	if (strcmp(mp->mnt_stat.f_fstypename, "zfs") != 0)
+		return;
 	if (!xattr_enabled(mp))
 		return;
 	MNT_ILOCK(mp);
@@ -84,15 +89,34 @@ scan_zfs_mounts(void)
 	mtx_unlock(&mountlist_mtx);
 }
 
+/* Mount is already busy here; do not vfs_busy again. */
+static void
+on_vfs_mounted(void *arg __unused, struct mount *mp,
+    struct vnode *root __unused, struct thread *td __unused)
+{
+
+	tag_mount(mp);
+}
+
 static int
 pqk_zfs_ea_modevent(module_t mod __unused, int type, void *data __unused)
 {
 
 	switch (type) {
 	case MOD_LOAD:
+		pqk_mounted_tag = EVENTHANDLER_REGISTER(vfs_mounted,
+		    on_vfs_mounted, NULL, EVENTHANDLER_PRI_ANY);
+		if (pqk_mounted_tag == NULL)
+			return (ENOMEM);
 		scan_zfs_mounts();
+		printf("pqk_zfs_ea: loaded\n");
 		return (0);
 	case MOD_UNLOAD:
+		if (pqk_mounted_tag != NULL) {
+			EVENTHANDLER_DEREGISTER(vfs_mounted, pqk_mounted_tag);
+			pqk_mounted_tag = NULL;
+		}
+		return (0);
 	case MOD_SHUTDOWN:
 		return (0);
 	default:
