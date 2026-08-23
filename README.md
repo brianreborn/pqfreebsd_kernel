@@ -3,9 +3,18 @@
 **Copyright © 2026 Brian Fundakowski Feldman.**  
 **License: [Light-ware](LICENSE).** See **[NOTICE.md](NOTICE.md)**.
 
-Tiny FreeBSD KLDs for PQFreeBSD. The **core** module holds suite state; **compat**
-modules paper over host bugs or add focused critical features. Skills do not
-build this tree on demand.
+Tiny FreeBSD KLDs for PQFreeBSD. Skills do not build this tree on demand.
+
+## Required vs optional
+
+| Requirement | Module |
+| --- | --- |
+| **Always required** | `pqfreebsd.ko` only — the skeletal core (enforcement / audit state). |
+| **As needed to enable** | Any number of sibling `pqfreebsd_*` KLDs (compat, features). The suite may need zero or many of them for a given enablement path; none of them are required merely to have the core loaded. |
+
+The core **does not** load siblings. Userland decides what else to load.
+Enabling full PQFreeBSD functionality may pull in several KLDs; the only
+hard baseline is the skeleton.
 
 ## Current status (blocker)
 
@@ -27,14 +36,14 @@ quietly from `onestart`. The **core module does not load compat KLDs**.
 
 | Module | Role |
 | --- | --- |
-| `pqfreebsd` | Core. Maintains suite **enforcement** and **audit** state (`security.pqfreebsd.*`). Logs to the kernel message buffer when those flags change. Does **not** load other `pqfreebsd_*` KLDs. Critical feature work lives in sibling modules. |
-| `pqfreebsd_compat_zfs_multilabel` | Bug accommodation: set `MNT_MULTILABEL` on ZFS mounts with effective `xattr=on`/`dir` or `xattr=sa`. `MODULE_DEPEND`s on `pqfreebsd` + `zfsctrl`. Loaded by the suite, not by the core. |
+| `pqfreebsd` | **Required** skeletal core. Suite **enforcement** / **audit** state (`security.pqfreebsd.*`); kernel messages on change. Does **not** load other `pqfreebsd_*` KLDs. |
+| `pqfreebsd_compat_zfs_multilabel` | **Optional until ZFS MAC labels are needed.** Bug accommodation: `MNT_MULTILABEL` on ZFS with effective `xattr=on`/`dir` or `sa`. `MODULE_DEPEND`s on `pqfreebsd` + `zfsctrl`. Suite loads it, not the core. |
 
 ```
-pqfreebsd.ko          ← core state only; does not kldload children
- ├── (dependents MODULE_DEPEND on pqfreebsd)
+pqfreebsd.ko                    ← ONLY module always required
+ ├── optional dependents (MODULE_DEPEND on pqfreebsd; suite loads)
 │   pqfreebsd_compat_zfs_multilabel.ko
-│   …
+│   pqfreebsd_* …               ← any number, as enablement needs
 ```
 
 ### Core sysctls
@@ -71,6 +80,7 @@ pqfreebsd_load="YES"
 pqfreebsd_compat_zfs_multilabel_load="YES"
 ```
 
-`service pqfreebsd onestart` loads core then compat when present.
+`service pqfreebsd onestart` loads the required core, then any sibling
+`.ko` files that are installed and wanted for that host’s enablement.
 
 Pin: `git ls-remote https://github.com/brianreborn/pqfreebsd_kernel.git HEAD`

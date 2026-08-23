@@ -2,10 +2,11 @@
  * Copyright (c) 2026 Brian Fundakowski Feldman. All rights reserved.
  * Light-ware License — see LICENSE at the repository root.
  *
- * Core PQFreeBSD KLD. Owns suite enforcement/audit state for transparency
- * and an audit trail. Does not implement feature policy itself and does
- * not load compat / bug-accommodation KLDs — those MODULE_DEPEND on this
- * module; the userland suite loads them separately.
+ * Skeletal core PQFreeBSD KLD — the only module always required.
+ * Owns suite enforcement/audit state for transparency and an audit trail.
+ * Does not implement feature policy and does not load sibling KLDs.
+ * Compat / feature modules MODULE_DEPEND on this; the suite may load any
+ * number of them to enable a given path.
  */
 
 #include <sys/param.h>
