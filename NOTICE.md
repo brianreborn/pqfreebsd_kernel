@@ -22,10 +22,15 @@ Required acknowledgement in advertising (clause 3):
 
 > This product includes software developed by Brian Fundakowski Feldman.
 
+## Purpose
+
+Compat workarounds for **trivial host bugs** that would otherwise block
+PQFreeBSD (today: ZFS not advertising `MNT_MULTILABEL`). The proper fix is
+upstream. These KLDs exist so PQFreeBSD can keep working **without** asking
+operators to perform special steps or compromise suite functionality.
+
 ## Integration policy
 
-These modules are **requisite and generic** for PQFreeBSD / MAC work.
-Do **not** have other projects vendor or build them on demand yet.
-Skills and operators may load the resulting `.ko` files; treat this
-tree as a separate kernel deliverable, not a library to pull into
-skill trees.
+Separate kernel deliverable — not vendored into create-skill trees, not
+built on demand by skills. PQFreeBSD loads installed `.ko` files quietly
+from `onestart`. Do not have unrelated projects integrate this tree yet.

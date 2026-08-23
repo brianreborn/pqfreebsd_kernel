@@ -2,8 +2,11 @@
  * Copyright (c) 2026 Brian Fundakowski Feldman. All rights reserved.
  * Light-ware License — see LICENSE at the repository root.
  *
- * On load and on each new mount: for ZFS with effective xattr on/dir or
- * sa (local or inherited), set MNT_MULTILABEL so MAC can use EAs.
+ * Compat for a trivial OpenZFS/FreeBSD bug: ZFS mounts do not set
+ * MNT_MULTILABEL (UFS does). Proper fix is upstream. Until then, on load
+ * and on each new mount, if effective xattr is on/dir or sa (local or
+ * inherited), set MNT_MULTILABEL so MAC can store labels as EAs.
+ * Loaded quietly by PQFreeBSD onestart when installed — no operator ritual.
  */
 
 #include <sys/param.h>

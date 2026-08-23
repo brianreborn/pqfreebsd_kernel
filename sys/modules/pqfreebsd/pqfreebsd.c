@@ -3,6 +3,7 @@
  * Light-ware License — see LICENSE at the repository root.
  *
  * Core PQFreeBSD KLD. Compat modules MODULE_DEPEND on this.
+ * Kept tiny; loaded by the suite so operators need no special step.
  */
 
 #include <sys/param.h>
