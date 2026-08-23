@@ -1,0 +1,85 @@
+.\" Copyright (c) 2026 Brian Fundakowski Feldman.
+.\" Light-ware License — see LICENSE at the repository root.
+.Dd August 23, 2026
+.Dt PQFREEBSD_COMPAT_ZFS_MULTILABEL 4
+.Os
+.Sh NAME
+.Nm pqfreebsd_compat_zfs_multilabel
+.Nd set MNT_MULTILABEL on ZFS mounts with xattr enabled
+.Sh SYNOPSIS
+ZFS hosts only.
+Prefer
+.Xr loader.conf 5 :
+.Bd -literal -offset indent
+pqfreebsd_load="YES"
+pqfreebsd_compat_zfs_multilabel_load="YES"
+.Ed
+.Pp
+Or at run time after
+.Xr pqfreebsd 4 :
+.Bd -literal -offset indent
+kldload pqfreebsd_compat_zfs_multilabel
+.Ed
+.Sh DESCRIPTION
+.Nm
+is a
+.Em ZFS-only
+compat module for PQFreeBSD
+.Pq pqk .
+Legacy UFS/FFS already sets
+.Dv MNT_MULTILABEL
+and never had this regression.
+OpenZFS mounts that omit the flag receive it when the effective
+.Cm xattr
+property is
+.Cm on
+.Pq also
+.Cm dir
+or
+.Cm sa
+.Pq local or inherited .
+A proper fix will go upstream.
+.Pp
+On
+.Dv MOD_LOAD
+the module registers a
+.Dv vfs_mounted
+handler and scans active ZFS mounts.
+Each mount newly marked emits a
+.Xr log 9
+.Dv LOG_INFO
+line.
+The handler is dropped in
+.Dv MOD_QUIESCE .
+.Pp
+This module depends on
+.Nm pqfreebsd
+and
+.Nm zfsctrl
+via
+.Fn MODULE_DEPEND .
+.Xr pqfreebsd 4
+does not load it;
+pqf skills or
+.Xr loader 8
+do when ZFS is in play.
+.Sh SEE ALSO
+.Xr mac 4 ,
+.Xr pqfreebsd 4 ,
+.Xr loader.conf 5 ,
+.Xr kldload 8 ,
+.Xr mount 8 ,
+.Xr zfs 8 ,
+.Xr log 9
+.Sh AUTHORS
+.An Brian Fundakowski Feldman
+.Sh LICENSE
+Light-ware License.
+Copyright (c) 2026 Brian Fundakowski Feldman.
+.Sh BUGS
+Does not clear
+.Dv MNT_MULTILABEL
+on unload.
+Remounts that change
+.Cm xattr
+are not observed until reload or a new mount.

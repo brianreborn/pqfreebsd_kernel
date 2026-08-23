@@ -19,3 +19,5 @@
 SUBDIR=	sys/modules
 
 .include <bsd.subdir.mk>
+
+# Manuals (optional): mandoc -T ascii man/man4/pqfreebsd.4

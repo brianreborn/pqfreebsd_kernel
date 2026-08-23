@@ -1,0 +1,74 @@
+.\" Copyright (c) 2026 Brian Fundakowski Feldman.
+.\" Light-ware License — see LICENSE at the repository root.
+.Dd August 23, 2026
+.Dt PQFREEBSD 4
+.Os
+.Sh NAME
+.Nm pqfreebsd
+.Nd PQFreeBSD skeletal core kernel module
+.Sh SYNOPSIS
+To load the module at boot, place in
+.Xr loader.conf 5 :
+.Bd -literal -offset indent
+pqfreebsd_load="YES"
+.Ed
+.Pp
+Or at run time:
+.Bd -literal -offset indent
+kldload pqfreebsd
+.Ed
+.Sh DESCRIPTION
+.Nm
+is the always-required
+.Em pqk
+core module for PQFreeBSD
+.Pq official name; evocative form Free(ly)B(le)S(se)D .
+It holds suite
+.Em enforcement
+and
+.Em audit
+state and logs changes with
+.Xr log 9 .
+It does not implement feature policy and does not load sibling
+.Nm pqfreebsd_*
+modules; userland or
+.Xr loader 8
+loads those separately.
+.Pp
+Ideal steady state is
+.Xr loader 8
+preload.
+.Xr kldload 8
+is a same-session fallback until reboot.
+Later ideal: full TPM e2e on that loader path
+.Pq not this cut .
+.Sh SYSCTL VARIABLES
+The following
+.Xr sysctl 8
+variables are available under
+.Va security.pqfreebsd :
+.Bl -tag -width "enforcement"
+.It Va enforcement
+Suite enforcement switch
+.Pq 0 off, 1 on; CTLFLAG_RWTUN .
+A
+.Xr log 9
+.Dv LOG_NOTICE
+message is emitted on change.
+.It Va audit
+Suite audit switch
+.Pq 0 off, 1 on; CTLFLAG_RWTUN; same logging as
+.Va enforcement .
+.El
+.Sh SEE ALSO
+.Xr mac 4 ,
+.Xr pqfreebsd_compat_zfs_multilabel 4 ,
+.Xr loader.conf 5 ,
+.Xr kldload 8 ,
+.Xr sysctl 8 ,
+.Xr log 9
+.Sh AUTHORS
+.An Brian Fundakowski Feldman
+.Sh LICENSE
+Light-ware License.
+Copyright (c) 2026 Brian Fundakowski Feldman.

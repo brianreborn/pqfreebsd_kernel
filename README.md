@@ -21,6 +21,12 @@ Tiny FreeBSD KLDs for PQFreeBSD (**pqk**). **Not LLM-dependent.** **pqf skills**
 (the PQFreeBSD skill suite) use installed `.ko` files; they do not build this
 tree on demand.
 
+Manuals:
+.Xr-style pages under
+`man/man4/pqfreebsd.4` and
+`man/man4/pqfreebsd_compat_zfs_multilabel.4`
+(`mandoc -T ascii man/man4/pqfreebsd.4`).
+
 ## Required vs optional
 
 | Requirement | Module |
