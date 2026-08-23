@@ -6,6 +6,10 @@
 (half-installed PQFreeBSD test host; where a master project should place this
 tree).
 
+**pqk** is an accepted short name for this tree: *Public Quantum Free Berkeley
+Software Distribution Kernel* (PQFreeBSD kernel). Loadable module names still
+use the `pqfreebsd` / `pqfreebsd_*` family so they match the suite.
+
 Tiny FreeBSD KLDs for PQFreeBSD. Skills do not build this tree on demand.
 
 ## Required vs optional

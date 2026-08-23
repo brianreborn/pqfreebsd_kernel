@@ -22,6 +22,12 @@ Required acknowledgement in advertising (clause 3):
 
 > This product includes software developed by Brian Fundakowski Feldman.
 
+## Name
+
+**pqk** — short for *Public Quantum Free Berkeley Software Distribution Kernel*
+(this repository / the PQFreeBSD kernel deliverable). Module `.ko` basenames
+remain `pqfreebsd` and `pqfreebsd_*`.
+
 ## Purpose
 
 - **`pqfreebsd.ko`** — **only always-required** KLD. Skeletal today; will be

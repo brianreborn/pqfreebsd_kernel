@@ -1,4 +1,7 @@
-# Release notes — pqfreebsd_kernel
+# Release notes — pqfreebsd_kernel (pqk)
+
+**pqk** = *Public Quantum Free Berkeley Software Distribution Kernel*. Module
+`.ko` names stay in the `pqfreebsd` / `pqfreebsd_*` family.
 
 ## Current cut (compat foothold)
 
