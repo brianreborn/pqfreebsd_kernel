@@ -115,4 +115,9 @@ pqfreebsd_compat_zfs_multilabel_load="YES"
 `kldload` is only a same-session fallback until reboot — not the preferred
 steady-state path.
 
+**Later ideal:** full **TPM end-to-end** with that loader path (measured boot /
+attestation of the preload chain). TPM e2e is **not this cut** — see pqf
+`pqfreebsd(7)` / interview loader gate — but the loader-first design is what
+that work will hang on.
+
 Pin: `git ls-remote https://github.com/brianreborn/pqfreebsd_kernel.git HEAD`

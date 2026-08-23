@@ -51,7 +51,8 @@ compat module.
 ## Integration policy
 
 Separate kernel deliverable — **not LLM-dependent**. Not vendored into
-create-skill trees; not built on demand by **pqf skills**. **Ideally loader-preloaded** (`loader.conf.local`). The **pqf** userland
-suite ensures that on install/stage/start and may `kldload` only until the
-next reboot. The core module does **not** load compat KLDs. Do not have
-unrelated projects integrate this tree yet.
+create-skill trees; not built on demand by **pqf skills**. **Ideally loader-preloaded** (`loader.conf.local`), and later with **full TPM
+e2e** on that path (not this cut). The **pqf** userland suite ensures loader
+lines on install/stage/start and may `kldload` only until the next reboot.
+The core module does **not** load compat KLDs. Do not have unrelated projects
+integrate this tree yet.
