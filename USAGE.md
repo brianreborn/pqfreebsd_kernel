@@ -23,7 +23,7 @@ against the TUI if your billing sheet uses a different tick scale.
 
 - Repo: [brianreborn/pqfreebsd_kernel](https://github.com/brianreborn/pqfreebsd_kernel) (**pqk**)
 - Companion docs/load path: [brianreborn/pqfreebsd](https://github.com/brianreborn/pqfreebsd) (**pqf skills**)
-- Deliverables: `pqfreebsd.ko` (core state), `pqfreebsd_compat_zfs_multilabel.ko` (ZFS-only), loader-first load, RELEASE_NOTES / half-install continuity
+- Deliverables: `pqfreebsd.ko` (core state), `pqfreebsd_compat_zfs_multilabel.ko` (ZFS-only), loader-first load, RELNOTES / half-install continuity
 
 ## Token usage (sum of 25 turn usage snapshots)
 

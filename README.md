@@ -2,9 +2,9 @@
 
 **Copyright © 2026 Brian Fundakowski Feldman.**  
 **License: [Light-ware](LICENSE).** See **[NOTICE.md](NOTICE.md)**.  
-**Release / install continuity:** see **[RELEASE_NOTES.md](RELEASE_NOTES.md)**
-(half-installed PQFreeBSD test host; where a master project should place this
-tree).  
+**Release notes:** see **[RELNOTES](RELNOTES)** (FreeBSD-style; half-install
+continuity and master placement).  
+
 **Sprint expenses:** see **[USAGE.md](USAGE.md)** (from session `/usage`
 telemetry).
 

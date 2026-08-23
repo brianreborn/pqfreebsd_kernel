@@ -1,0 +1,62 @@
+Release notes for pqfreebsd_kernel (pqk).
+
+This file describes new user-visible features, changes and updates relevant to
+users of binary or out-of-tree builds of this deliverable.  Each entry should
+describe the change in no more than several sentences and should reference
+manual pages or sysctl(8) names where an interested user can find more
+information.  Entries should wrap after 80 columns.  Each entry should begin
+with one or more commit IDs on one line, specified as a comma separated list
+and/or range, followed by a colon and a newline.  Entries should be separated
+by a newline.
+
+PQFreeBSD is the official non-fancy project name.  Free(ly)B(le)S(se)D (Freely
+Blessed) is the evocative Unix-style expansion that still reads FreeBSD.  pqk
+is short for Public Quantum Free Berkeley Software Distribution Kernel.
+Module .ko basenames remain pqfreebsd and pqfreebsd_*.
+
+This deliverable is not LLM-dependent.  pqf skills consume installed modules;
+they do not build this tree on demand.
+
+76b3fa1f9903,7d1281bd791d,d7252b8042a2,779065383714:
+	Introduce pqfreebsd(4)-style out-of-tree KLDs.  pqfreebsd.ko is the
+	skeletal core (always required).  pqfreebsd_compat_zfs_multilabel.ko
+	is a ZFS-only accommodation: OpenZFS mounts that omit MNT_MULTILABEL
+	(UFS/FFS already set it) get the flag when effective xattr is on/dir
+	or sa (local or inherited).  A proper ZFS multilabel fix will go
+	upstream.  See mount(8), zfs(8), and mac(4).
+
+c841acb1057f,056a19b7dcae,aa3a93053f63:
+	pqfreebsd.ko maintains suite enforcement and audit state via
+	security.pqfreebsd.enforcement and security.pqfreebsd.audit (default
+	off, CTLFLAG_RWTUN).  Changes are logged with log(9).  The core does
+	not kldload sibling modules; userland / loader does.  The core is the
+	clean path to lock down kernels without modifying FreeBSD source.
+
+c5707a00c99d,4ba61178b08d:
+	Module hygiene aligned with shipped FreeBSD KLD practice: plain ints
+	for state (cf. mac_seeotheruids(4)), MOD_QUIESCE before eventhandler
+	teardown (cf. siftr(4)), mountlist + vfs_busy locking (cf. g_journal),
+	and log(9) instead of printf for messages.
+
+e217e27ac2ec,41664feb1dcd:
+	Steady-state load is ideally loader(8) preload via loader.conf(5)
+	(pqfreebsd_load="YES"; ZFS hosts also
+	pqfreebsd_compat_zfs_multilabel_load="YES").  kldload(8) is only a
+	same-session fallback until reboot.  Later ideal: full TPM e2e on
+	that loader path (not this cut).
+
+c7b313101c0c:
+	Document mid-install continuity: the try-out host is half-installed
+	with pqf skills, paused on the ZFS MNT_MULTILABEL blocker.  After
+	this cut is installed there, continue the interrupted one* order;
+	do not assume a green-field re-interview unless PREINSTALL or
+	snapshots require it.  Master/umbrella projects must keep pqk as a
+	separate kernel deliverable next to (not inside) pqf skills.
+
+210b2d06e4a6:
+	Record Free(ly)B(le)S(se)D (Freely Blessed) as the evocative project
+	name alongside official PQFreeBSD.
+
+3887b8fb43db:
+	Add USAGE.md for sprint expense tracking from session telemetry;
+	reconcile with interactive /usage as the credit source of truth.
