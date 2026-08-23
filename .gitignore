@@ -1,0 +1,23 @@
+# Out-of-tree kmod build debris
+*.o
+*.ko
+*.kld
+*.debug
+*.full
+*.plist
+machine
+x86
+@
+.depend*
+.modules.depend
+export_syms
+vnode_if.*
+opt_*.h
+*.S
+*.pico
+*.Pico
+*.po
+*.So
+*.s
+compile/
+obj/
