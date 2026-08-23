@@ -24,6 +24,12 @@ Required acknowledgement in advertising (clause 3):
 
 ## Name
 
+**PQFreeBSD** is the official, non-fancy project name.
+
+**Free(ly)B(le)S(se)D** (*Freely Blessed*) is the evocative form: a Unix-style
+syllable expansion that still reads as FreeBSD. Nifty, a little novel, traditional
+in spirit.
+
 **pqk** — short for *Public Quantum Free Berkeley Software Distribution Kernel*
 (this repository / the PQFreeBSD kernel deliverable). Module `.ko` basenames
 remain `pqfreebsd` and `pqfreebsd_*`.

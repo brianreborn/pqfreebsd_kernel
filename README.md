@@ -12,6 +12,11 @@ telemetry).
 Software Distribution Kernel* (PQFreeBSD kernel). Loadable module names still
 use the `pqfreebsd` / `pqfreebsd_*` family so they match the suite.
 
+**Naming:** **PQFreeBSD** is the official, non-fancy project name. The
+evocative form, in the Unix tradition of playful expansions that keep a
+venerable string readable, is **Free(ly)B(le)S(se)D** — *Freely Blessed* —
+while the eye still sees FreeBSD.
+
 Tiny FreeBSD KLDs for PQFreeBSD (**pqk**). **Not LLM-dependent.** **pqf skills**
 (the PQFreeBSD skill suite) use installed `.ko` files; they do not build this
 tree on demand.

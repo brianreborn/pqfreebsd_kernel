@@ -3,6 +3,9 @@
 **pqk** = *Public Quantum Free Berkeley Software Distribution Kernel*. Module
 `.ko` names stay in the `pqfreebsd` / `pqfreebsd_*` family.
 
+**PQFreeBSD** = official non-fancy name. **Free(ly)B(le)S(se)D** = *Freely
+Blessed* (evocative FreeBSD expansion, Unix-traditional wordplay).
+
 ## Current cut (compat foothold)
 
 ### Test host status (acknowledgement)
