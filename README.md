@@ -16,6 +16,15 @@ The core **does not** load siblings. Userland decides what else to load.
 Enabling full PQFreeBSD functionality may pull in several KLDs; the only
 hard baseline is the skeleton.
 
+### Why the core matters (even while small)
+
+`pqfreebsd.ko` is **trivial today** on purpose. It will become **extremely
+critical** for PQFreeBSD to function properly: it is our **clean path into
+locking down kernels without modifying FreeBSD source**. Policy, enablement
+gates, and later critical controls hang off this loadable module rather than
+out-of-tree kernel patches. Treat it as the permanent in-kernel foothold —
+siblings come and go for bugs and features; the core stays.
+
 ## Current status (blocker)
 
 **On ZFS hosts, `pqfreebsd_compat_zfs_multilabel` is a live mid-install blocker

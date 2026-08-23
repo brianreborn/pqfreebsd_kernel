@@ -3,10 +3,12 @@
  * Light-ware License — see LICENSE at the repository root.
  *
  * Skeletal core PQFreeBSD KLD — the only module always required.
- * Owns suite enforcement/audit state for transparency and an audit trail.
- * Does not implement feature policy and does not load sibling KLDs.
- * Compat / feature modules MODULE_DEPEND on this; the suite may load any
- * number of them to enable a given path.
+ * Trivial today; will be extremely critical: clean path to lock down
+ * kernels without modifying FreeBSD source. Owns suite enforcement/audit
+ * state for transparency and an audit trail. Does not implement feature
+ * policy and does not load sibling KLDs. Compat / feature modules
+ * MODULE_DEPEND on this; the suite may load any number of them to enable
+ * a given path.
  */
 
 #include <sys/param.h>

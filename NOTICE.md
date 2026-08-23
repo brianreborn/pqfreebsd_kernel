@@ -24,9 +24,11 @@ Required acknowledgement in advertising (clause 3):
 
 ## Purpose
 
-- **`pqfreebsd.ko`** — **only always-required** KLD. Skeletal core: suite
-  state (enforcement / audit), transparency, audit trail. Does not load
-  other KLDs; does not implement feature policy.
+- **`pqfreebsd.ko`** — **only always-required** KLD. Skeletal today; will be
+  **extremely critical** for PQFreeBSD. Clean path to lock down kernels
+  **without modifying FreeBSD source** — the permanent in-kernel foothold.
+  Suite state (enforcement / audit), transparency, audit trail. Does not
+  load other KLDs; feature policy lives in siblings.
 - **`pqfreebsd_*` siblings** — any number may be required **to enable** a
   given path. None are required merely to load the skeleton. Today:
   `pqfreebsd_compat_zfs_multilabel` is **ZFS-only** (UFS/FFS already has
