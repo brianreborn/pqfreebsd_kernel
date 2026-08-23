@@ -126,6 +126,10 @@ make install
 **Before check-in:** `make clean all` (and a second `SYSDIR` when available),
 then commit. Do not push untested `.c` changes.
 
+**Local load test (you run it):** `sh tools/kldtest.sh` — builds, then
+`kldload`(8) if you are root. Does not write `loader.conf`. ZFS hosts
+also load the compat KLD.
+
 **Ideally preloaded by loader(8)** every boot. pqf skills write
 `/boot/loader.conf.local` on install/stage/start:
 

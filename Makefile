@@ -9,6 +9,7 @@
 #
 # Test-build with make clean all before check-in.
 # Style: sh tools/checkstyle.sh
+# Local load test (you run it): sh tools/kldtest.sh
 
 .if defined(SYSDIR)
 .MAKEFLAGS: SYSDIR=${SYSDIR}
