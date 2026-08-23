@@ -32,7 +32,7 @@ Required acknowledgement in advertising (clause 3):
 - **`pqfreebsd_*` siblings** — any number may be required **to enable** a
   given path. None are required merely to load the skeleton. Today:
   `pqfreebsd_compat_zfs_multilabel` is **ZFS-only** (UFS/FFS already has
-  `MNT_MULTILABEL`; proper fix for ZFS is upstream).
+  `MNT_MULTILABEL`; proper fix for ZFS will go upstream).
 
 These KLDs exist so PQFreeBSD can keep working **without** asking operators
 to perform special steps or compromise suite functionality.

@@ -3,7 +3,7 @@
  * Light-ware License — see LICENSE at the repository root.
  *
  * ZFS-only compat. Legacy UFS/FFS already sets MNT_MULTILABEL and never had
- * this regression. OpenZFS mounts omit the flag; proper fix is upstream.
+ * this regression. OpenZFS mounts omit the flag; proper fix will go upstream.
  * Mid-install blocker for pqfreebsd on ZFS hosts. On load and each new
  * mount, if effective xattr is on/dir or sa (local or inherited), set
  * MNT_MULTILABEL so MAC can store labels as EAs. Suite loads this only when

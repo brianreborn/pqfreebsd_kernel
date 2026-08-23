@@ -31,8 +31,9 @@ siblings come and go for bugs and features; the core stays.
 for [pqfreebsd](https://github.com/brianreborn/pqfreebsd).** OpenZFS mounts do
 not set `MNT_MULTILABEL` (UFS/FFS do — and did before ZFS introduced this
 regression), so MAC labels as EAs on ZFS do not work until this compat KLD (or
-an upstream fix) is in place. A pure UFS/FFS system does **not** need this
-module. We are mid-install on ZFS and checking for bugs of this class.
+a proper fix that will go upstream) is in place. A pure UFS/FFS system does
+**not** need this module. We are mid-install on ZFS and checking for bugs of
+this class.
 
 **Also seen on the same box:** `su` (and similar) are broken. That is **not
 directly** the multilabel bug. It may clear once labels can stick on ZFS; do
