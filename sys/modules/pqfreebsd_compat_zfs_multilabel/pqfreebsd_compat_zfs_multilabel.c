@@ -63,14 +63,23 @@ xattr_enabled(struct mount *mp)
 static void
 tag_mount(struct mount *mp)
 {
+	int set;
 
 	if (strcmp(mp->mnt_stat.f_fstypename, "zfs") != 0)
 		return;
 	if (!xattr_enabled(mp))
 		return;
+
 	MNT_ILOCK(mp);
-	mp->mnt_flag |= MNT_MULTILABEL;
+	set = (mp->mnt_flag & MNT_MULTILABEL) == 0;
+	if (set)
+		mp->mnt_flag |= MNT_MULTILABEL;
 	MNT_IUNLOCK(mp);
+
+	/* One line per mount we actually modify — shows up in dmesg / messages. */
+	if (set)
+		printf("pqfreebsd_compat_zfs_multilabel: multilabel on %s (%s)\n",
+		    mp->mnt_stat.f_mntonname, mp->mnt_stat.f_mntfromname);
 }
 
 /*
