@@ -48,7 +48,7 @@ not fold it into the multilabel KLD’s job.
 
 **Design rule:** do not require anything special of the operator wherever that
 would not compromise PQFreeBSD. The userland suite loads installed `.ko` files
-quietly from `onestart`. The **core module does not load compat KLDs**.
+on every service start (boot), during install/stage, and via `onestart`. The **core module does not load compat KLDs**.
 
 ## Modules
 
@@ -101,15 +101,16 @@ make install
 **Before check-in:** `make clean all` (and a second `SYSDIR` when available),
 then commit. Do not push untested `.c` changes.
 
-Suite load (userland — not the core KLD):
+Suite load (userland — not the core KLD): every **`start` (boot)**,
+**install**, and **stage** call `_pqfreebsd_kld_load` and ensure
+`/boot/loader.conf.local` has:
 
 ```
-# loader.conf optional
 pqfreebsd_load="YES"
+# ZFS hosts only:
 pqfreebsd_compat_zfs_multilabel_load="YES"
 ```
 
-`service pqfreebsd onestart` loads the required core, then any sibling
-`.ko` files that are installed and wanted for that host’s enablement.
+Not limited to `onestart`.
 
 Pin: `git ls-remote https://github.com/brianreborn/pqfreebsd_kernel.git HEAD`

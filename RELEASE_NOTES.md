@@ -16,7 +16,7 @@ rest of the PQFreeBSD `one*` order **have not been finished** on that host.
 **Once this blocker is cleared** (compat `.ko` built, installed, and loaded on
 that ZFS box — or a proper fix that will go upstream), **continue the
 half-finished PQFreeBSD skill install** from the interrupted step (typically
-after `onestart` / before or at parent `onelabel`, then the remainder of
+after `start`/boot/install has the KLDs / before or at parent `onelabel`, then the remainder of
 `pqledger` / `pqdac` / checklabels / optional `oneenforce`). Do not restart the
 interview from scratch unless `PREINSTALL` / snapshots say otherwise.
 
@@ -27,7 +27,7 @@ When a master / umbrella project **imbibes** these repos, keep roles separate:
 | Repo | Place in the master layout | Do not |
 | --- | --- | --- |
 | `brianreborn/pqfreebsd_kernel` | **Kernel deliverable** — build/install like other out-of-tree KLDs (`make` / `make install` into the module path, or a ports/package later). Sibling to the skill tree, not inside it. | Do not vendor into `/create-skill` or `skills/`; do not build on demand per skill run. |
-| `brianreborn/pqfreebsd` | **Skill + userland suite** (plugin / result dir / port). Loads installed `.ko` quietly from `onestart`. | Do not compile KLDs from the skill. |
+| `brianreborn/pqfreebsd` | **Skill + userland suite** (plugin / result dir / port). Loads installed `.ko` on every service start (boot), during install/stage, and via `onestart`. | Do not compile KLDs from the skill. |
 
 **Load rules the master must preserve:**
 

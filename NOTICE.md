@@ -52,5 +52,5 @@ compat module.
 
 Separate kernel deliverable — not vendored into create-skill trees, not
 built on demand by skills. The **userland suite** loads installed `.ko`
-files quietly from `onestart`; the core module does **not** load compat
+files on every service start (boot), during install/stage, and via `onestart`; the core module does **not** load compat
 KLDs. Do not have unrelated projects integrate this tree yet.
