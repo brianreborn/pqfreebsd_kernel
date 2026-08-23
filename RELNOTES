@@ -68,3 +68,11 @@ c7b313101c0c:
 	Add tools/checkstyle.sh (checkstyle9.pl, mandoc -T lint).
 	Move dsl_prop_get_integer prototype to pqfreebsd_zfs_prop.h per
 	style(9) (no externs in .c files).
+
+8841aa96d3df:
+	Match in-tree FreeBSD KLD conventions.  Sources live in
+	sys/pqfreebsd; sys/modules/<kmod> Makefiles use .PATH and
+	SRCS=${KMOD}.c (vnode_if.h when sys/vnode.h is included).
+	Manuals moved to share/man/man4.  C and Makefiles carry SPDX
+	headers; pqfreebsd(4) and pqfreebsd_compat_zfs_multilabel(4)
+	use style.mdoc HISTORY/FILES/AUTHORS.  See pqfreebsd(4).
