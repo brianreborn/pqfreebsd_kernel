@@ -1,17 +1,21 @@
-/*-
+/*
  * Copyright (c) 2026 Brian Fundakowski Feldman. All rights reserved.
+ *
+ * SPDX-License-Identifier: LicenseRef-Light-ware
+ *
  * Light-ware License — see LICENSE at the repository root.
+ */
+
+/*
+ * Skeletal core PQFreeBSD KLD — the only module always required.  Trivial
+ * today; will be extremely critical: clean path to lock down kernels
+ * without modifying FreeBSD source.  Owns suite enforcement/audit state
+ * for transparency and an audit trail.  Does not implement feature policy
+ * and does not load sibling KLDs.  Compat / feature modules MODULE_DEPEND
+ * on this; the suite may load any number of them to enable a given path.
  *
- * Skeletal core PQFreeBSD KLD — the only module always required.
- * Trivial today; will be extremely critical: clean path to lock down
- * kernels without modifying FreeBSD source. Owns suite enforcement/audit
- * state for transparency and an audit trail. Does not implement feature
- * policy and does not load sibling KLDs. Compat / feature modules
- * MODULE_DEPEND on this; the suite may load any number of them to enable
- * a given path.
- *
- * Sysctl style follows mac_seeotheruids(4) / mac_ifoff(4): plain ints,
- * no module-local MTX_SYSINIT (avoids unload/reload pitfalls).
+ * Sysctl style follows mac_seeotheruids(4) / mac_ifoff(4): plain ints, no
+ * module-local MTX_SYSINIT (avoids unload/reload pitfalls).
  */
 
 #include <sys/param.h>
@@ -25,12 +29,12 @@
 #define	PQFREEBSD_STATE_AUDIT		2
 
 /*
- * Suite-level switches. Default off — same spirit as MAC policy modules
- * that stay loaded with enabled=0 until a deliberate window. Changing a
+ * Suite-level switches.  Default off — same spirit as MAC policy modules
+ * that stay loaded with enabled=0 until a deliberate window.  Changing a
  * flag only logs for now (complete trail / transparency).
  */
-static int pqfreebsd_enforcement;
-static int pqfreebsd_audit;
+static int	pqfreebsd_enforcement = 0;
+static int	pqfreebsd_audit = 0;
 
 static int
 pqfreebsd_sysctl_state(SYSCTL_HANDLER_ARGS)
@@ -56,7 +60,8 @@ pqfreebsd_sysctl_state(SYSCTL_HANDLER_ARGS)
 	return (0);
 }
 
-SYSCTL_NODE(_security, OID_AUTO, pqfreebsd, CTLFLAG_RW | CTLFLAG_MPSAFE, 0,
+static SYSCTL_NODE(_security, OID_AUTO, pqfreebsd,
+    CTLFLAG_RW | CTLFLAG_MPSAFE, 0,
     "PQFreeBSD core state");
 SYSCTL_PROC(_security_pqfreebsd, OID_AUTO, enforcement,
     CTLTYPE_INT | CTLFLAG_RWTUN | CTLFLAG_MPSAFE, &pqfreebsd_enforcement,
@@ -70,30 +75,29 @@ SYSCTL_PROC(_security_pqfreebsd, OID_AUTO, audit,
 static int
 pqfreebsd_modevent(module_t mod __unused, int type, void *data __unused)
 {
+	int error = 0;
 
 	switch (type) {
 	case MOD_LOAD:
-		/*
-		 * Tunables may already have set the ints via CTLFLAG_RWTUN;
-		 * only force defaults when still zero at first load message.
-		 */
 		log(LOG_NOTICE, "pqfreebsd: loaded (enforcement=%s audit=%s)\n",
 		    pqfreebsd_enforcement ? "enabled" : "disabled",
 		    pqfreebsd_audit ? "enabled" : "disabled");
-		return (0);
+		break;
 	case MOD_QUIESCE:
-		return (0);
+		break;
 	case MOD_UNLOAD:
 		log(LOG_NOTICE,
 		    "pqfreebsd: unloaded (enforcement was %s audit was %s)\n",
 		    pqfreebsd_enforcement ? "enabled" : "disabled",
 		    pqfreebsd_audit ? "enabled" : "disabled");
-		return (0);
+		break;
 	case MOD_SHUTDOWN:
-		return (0);
+		break;
 	default:
-		return (EOPNOTSUPP);
+		error = EOPNOTSUPP;
+		break;
 	}
+	return (error);
 }
 
 static moduledata_t pqfreebsd_mod = {

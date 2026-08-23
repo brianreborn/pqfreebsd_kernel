@@ -1,11 +1,11 @@
-# Copyright (c) 2026 Brian Fundakowski Feldman.
-# Light-ware License — see LICENSE.
+# SPDX-License-Identifier: LicenseRef-Light-ware
+#
+# Copyright (c) 2026 Brian Fundakowski Feldman
 
-.if !defined(SYSDIR)
-SYSDIR?=	/usr/src/sys
-.endif
+.PATH: ${.CURDIR:H:H}/pqfreebsd
 
 KMOD=	pqfreebsd_compat_zfs_multilabel
-SRCS=	pqfreebsd_compat_zfs_multilabel.c
+SRCS=	${KMOD}.c
+SRCS+=	vnode_if.h
 
 .include <bsd.kmod.mk>

@@ -1,30 +1,34 @@
-/*-
+/*
  * Copyright (c) 2026 Brian Fundakowski Feldman. All rights reserved.
- * Light-ware License — see LICENSE at the repository root.
  *
- * ZFS-only compat. Legacy UFS/FFS already sets MNT_MULTILABEL and never had
- * this regression. OpenZFS mounts omit the flag; proper fix will go upstream.
- * Mid-install blocker for pqfreebsd on ZFS hosts. On load and each new
- * mount, if effective xattr is on/dir or sa (local or inherited), set
- * MNT_MULTILABEL so MAC can store labels as EAs. Suite loads this only when
- * ZFS is in play — not on pure UFS/FFS. su/login oddities are not this
- * module's job; they may clear once labels can stick.
+ * SPDX-License-Identifier: LicenseRef-Light-ware
+ *
+ * Light-ware License — see LICENSE at the repository root.
+ */
+
+/*
+ * ZFS-only compat.  Legacy UFS/FFS already sets MNT_MULTILABEL and never
+ * had this regression.  OpenZFS mounts omit the flag; a proper fix will go
+ * upstream.  On load and each new mount, if effective xattr is on/dir or
+ * sa (local or inherited), set MNT_MULTILABEL so MAC can store labels as
+ * EAs.  Suite/loader load this only when ZFS is in play.
  *
  * Eventhandler teardown follows siftr(4)/alq(9): drop the handler in
- * MOD_QUIESCE before MOD_UNLOAD so callbacks cannot race module teardown.
- * Mount walk matches g_journal / suspend_all_fs locking.
+ * MOD_QUIESCE before MOD_UNLOAD.  Mount walk matches g_journal /
+ * suspend_all_fs locking.
  */
 
 #include <sys/param.h>
 #include <sys/systm.h>
-#include <sys/kernel.h>
-#include <sys/module.h>
-#include <sys/lock.h>
-#include <sys/mutex.h>
-#include <sys/mount.h>
-#include <sys/queue.h>
 #include <sys/eventhandler.h>
+#include <sys/kernel.h>
+#include <sys/lock.h>
+#include <sys/module.h>
+#include <sys/mount.h>
+#include <sys/mutex.h>
+#include <sys/queue.h>
 #include <sys/syslog.h>
+#include <sys/vnode.h>
 
 #include "pqfreebsd_zfs_prop.h"
 
@@ -32,7 +36,7 @@
 #define	PQFREEBSD_XATTR_DIR	1
 #define	PQFREEBSD_XATTR_SA	2
 
-static eventhandler_tag pqfreebsd_vfs_mounted_tag;
+static eventhandler_tag pqfreebsd_vfs_mounted_tag = NULL;
 
 static int
 opt_isset(struct mount *mp, const char *name)
@@ -79,7 +83,6 @@ tag_mount(struct mount *mp)
 		mp->mnt_flag |= MNT_MULTILABEL;
 	MNT_IUNLOCK(mp);
 
-	/* One line per mount we actually modify (syslog / message buffer). */
 	if (set)
 		log(LOG_INFO,
 		    "pqfreebsd_compat_zfs_multilabel: multilabel on %s (%s)\n",
@@ -131,6 +134,7 @@ static int
 pqfreebsd_compat_zfs_multilabel_modevent(module_t mod __unused, int type,
     void *data __unused)
 {
+	int error = 0;
 
 	switch (type) {
 	case MOD_LOAD:
@@ -140,22 +144,25 @@ pqfreebsd_compat_zfs_multilabel_modevent(module_t mod __unused, int type,
 		 */
 		pqfreebsd_vfs_mounted_tag = EVENTHANDLER_REGISTER(vfs_mounted,
 		    on_vfs_mounted, NULL, EVENTHANDLER_PRI_ANY);
-		if (pqfreebsd_vfs_mounted_tag == NULL)
-			return (ENOMEM);
+		if (pqfreebsd_vfs_mounted_tag == NULL) {
+			error = ENOMEM;
+			break;
+		}
 		scan_zfs_mounts();
 		log(LOG_NOTICE, "pqfreebsd_compat_zfs_multilabel: loaded\n");
-		return (0);
+		break;
 	case MOD_QUIESCE:
 	case MOD_SHUTDOWN:
 		pqfreebsd_compat_zfs_multilabel_stop();
-		return (0);
+		break;
 	case MOD_UNLOAD:
-		/* Idempotent if QUIESCE already ran. */
 		pqfreebsd_compat_zfs_multilabel_stop();
-		return (0);
+		break;
 	default:
-		return (EOPNOTSUPP);
+		error = EOPNOTSUPP;
+		break;
 	}
+	return (error);
 }
 
 static moduledata_t pqfreebsd_compat_zfs_multilabel_mod = {

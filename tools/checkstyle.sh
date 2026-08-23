@@ -6,14 +6,14 @@ cd "$(dirname "$0")/.."
 SRC=${SRCTOP:-/usr/src}
 CHECK=${SRC}/tools/build/checkstyle9.pl
 st=0
+CSRC="sys/pqfreebsd/pqfreebsd.c \
+	sys/pqfreebsd/pqfreebsd_compat_zfs_multilabel.c \
+	sys/pqfreebsd/pqfreebsd_zfs_prop.h"
 
 echo "==> checkstyle9.pl (style(9))"
 if [ -f "$CHECK" ]; then
-	perl "$CHECK" -f --color=never \
-	    sys/modules/pqfreebsd/pqfreebsd.c \
-	    sys/modules/pqfreebsd_compat_zfs_multilabel/pqfreebsd_compat_zfs_multilabel.c \
-	    sys/modules/pqfreebsd_compat_zfs_multilabel/pqfreebsd_zfs_prop.h \
-	    || st=1
+	# shellcheck disable=SC2086
+	perl "$CHECK" -f --color=never $CSRC || st=1
 else
 	echo "skip: $CHECK not found" >&2
 fi
@@ -22,11 +22,9 @@ echo "==> git diff --check (whitespace)"
 git diff --check HEAD -- . || st=1
 
 echo "==> lines > 80 columns (src)"
+# shellcheck disable=SC2086
 if awk 'length > 80 { print FILENAME ":" NR ":" length; found=1 }
-    END { exit found+0 }' \
-    sys/modules/pqfreebsd/pqfreebsd.c \
-    sys/modules/pqfreebsd_compat_zfs_multilabel/pqfreebsd_compat_zfs_multilabel.c \
-    sys/modules/pqfreebsd_compat_zfs_multilabel/pqfreebsd_zfs_prop.h
+    END { exit found+0 }' $CSRC
 then
 	:
 else
@@ -35,9 +33,7 @@ fi
 
 echo "==> mandoc -T lint (style.mdoc(5))"
 if command -v mandoc >/dev/null 2>&1; then
-	# Sibling Xr pages are not in the system mandoc db until installed;
-	# strip that STYLE so local trees can lint clean.
-	lintout=$(mandoc -T lint man/man4/*.4 2>&1) || true
+	lintout=$(mandoc -T lint share/man/man4/*.4 2>&1) || true
 	lintout=$(printf '%s\n' "$lintout" |
 	    grep -v 'referenced manual not found: Xr pqfreebsd' || true)
 	if [ -n "$lintout" ]; then

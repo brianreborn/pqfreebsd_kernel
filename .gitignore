@@ -1,4 +1,4 @@
-# Out-of-tree kmod build debris
+# Out-of-tree kmod build debris (bsd.kmod.mk / bsd.prog.mk)
 *.o
 *.ko
 *.kld
@@ -7,6 +7,10 @@
 *.plist
 machine
 x86
+i386
+amd64
+*.4.gz
+*.cat.gz
 @
 .depend*
 .modules.depend

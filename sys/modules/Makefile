@@ -1,7 +1,8 @@
-# Copyright (c) 2026 Brian Fundakowski Feldman. Light-ware License — see LICENSE.
+# SPDX-License-Identifier: LicenseRef-Light-ware
 #
-# Collection of small PQFreeBSD kernel modules. Add new modules here as
-# SUBDIR entries; each builds with bsd.kmod.mk like the base system.
+# Copyright (c) 2026 Brian Fundakowski Feldman
+#
+# Out-of-tree analog of src/sys/modules: one subdirectory per KLD.
 
 .if defined(SYSDIR)
 .MAKEFLAGS: SYSDIR=${SYSDIR}
@@ -9,5 +10,6 @@
 
 SUBDIR=	pqfreebsd \
 	pqfreebsd_compat_zfs_multilabel
+SUBDIR_PARALLEL=
 
 .include <bsd.subdir.mk>

@@ -2,9 +2,7 @@
 #
 # Copyright (c) 2026 Brian Fundakowski Feldman
 
-.PATH: ${.CURDIR:H:H}/pqfreebsd
+MAN=	pqfreebsd.4 \
+	pqfreebsd_compat_zfs_multilabel.4
 
-KMOD=	pqfreebsd
-SRCS=	${KMOD}.c
-
-.include <bsd.kmod.mk>
+.include <bsd.prog.mk>

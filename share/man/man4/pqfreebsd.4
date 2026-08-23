@@ -1,5 +1,10 @@
-.\" Copyright (c) 2026 Brian Fundakowski Feldman.
+.\"
+.\" Copyright (c) 2026 Brian Fundakowski Feldman. All rights reserved.
+.\"
+.\" SPDX-License-Identifier: LicenseRef-Light-ware
+.\"
 .\" Light-ware License — see LICENSE at the repository root.
+.\"
 .Dd August 23, 2026
 .Dt PQFREEBSD 4
 .Os
@@ -7,13 +12,13 @@
 .Nm pqfreebsd
 .Nd PQFreeBSD skeletal core kernel module
 .Sh SYNOPSIS
-To load the module at boot, place in
+To load the module at boot time, place the following line in
 .Xr loader.conf 5 :
 .Bd -literal -offset indent
 pqfreebsd_load="YES"
 .Ed
 .Pp
-Or at run time:
+Alternatively, to load the module at run time:
 .Bd -literal -offset indent
 kldload pqfreebsd
 .Ed
@@ -48,19 +53,30 @@ Later ideal: full TPM e2e on that loader path
 The following
 .Xr sysctl 8
 variables are available under
-.Va security.pqfreebsd :
+.Va security.pqfreebsd .
+They are
+.Dv CTLFLAG_RWTUN
+and may also be set from
+.Xr loader.conf 5 .
 .Bl -tag -width "enforcement"
 .It Va enforcement
 Suite enforcement switch
-.Pq 0 off, 1 on; CTLFLAG_RWTUN .
+.Pq 0 off, 1 on .
 A
 .Xr log 9
 .Dv LOG_NOTICE
 message is emitted on change.
 .It Va audit
 Suite audit switch
-.Pq 0 off, 1 on; CTLFLAG_RWTUN; same logging as
+.Pq 0 off, 1 on; same logging as
 .Va enforcement .
+.El
+.Sh FILES
+.Bl -tag -width indent
+.It Pa /boot/modules/pqfreebsd.ko
+The
+.Nm
+kernel module.
 .El
 .Sh SEE ALSO
 .Xr mac 4 ,
@@ -69,8 +85,11 @@ Suite audit switch
 .Xr kldload 8 ,
 .Xr sysctl 8 ,
 .Xr log 9
+.Sh HISTORY
+The
+.Nm
+module first appeared in pqk.
 .Sh AUTHORS
-.An Brian Fundakowski Feldman
-.Sh LICENSE
-Light-ware License.
-Copyright (c) 2026 Brian Fundakowski Feldman.
+.An -nosplit
+This module was written by
+.An Brian Fundakowski Feldman Aq Mt brianisbornagain@gmail.com .

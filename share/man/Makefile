@@ -2,9 +2,6 @@
 #
 # Copyright (c) 2026 Brian Fundakowski Feldman
 
-.PATH: ${.CURDIR:H:H}/pqfreebsd
+SUBDIR=	man4
 
-KMOD=	pqfreebsd
-SRCS=	${KMOD}.c
-
-.include <bsd.kmod.mk>
+.include <bsd.subdir.mk>

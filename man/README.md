@@ -1,9 +1,14 @@
 # Manuals (GitHub view)
 
-Canonical sources are [mandoc](https://mandoc.bsd.lv/) pages:
+Canonical sources are [mandoc](https://mandoc.bsd.lv/) pages under
+`share/man/man4/` (in-tree layout):
 
-- [`man4/pqfreebsd.4`](man4/pqfreebsd.4) — `mandoc -T ascii man/man4/pqfreebsd.4`
-- [`man4/pqfreebsd_compat_zfs_multilabel.4`](man4/pqfreebsd_compat_zfs_multilabel.4)
+- [`../share/man/man4/pqfreebsd.4`](../share/man/man4/pqfreebsd.4)
+- [`../share/man/man4/pqfreebsd_compat_zfs_multilabel.4`](../share/man/man4/pqfreebsd_compat_zfs_multilabel.4)
+
+```
+mandoc -T ascii share/man/man4/pqfreebsd.4
+```
 
 GitHub does not typeset mdoc. Readable copies follow.
 
@@ -15,13 +20,14 @@ GitHub does not typeset mdoc. Readable copies follow.
 
 ### SYNOPSIS
 
-Load at boot (`loader.conf(5)`):
+To load the module at boot time, place the following line in
+`loader.conf(5)`:
 
 ```
 pqfreebsd_load="YES"
 ```
 
-Or at run time:
+Alternatively, to load the module at run time:
 
 ```
 kldload pqfreebsd
@@ -41,17 +47,31 @@ this cut).
 
 ### SYSCTL VARIABLES
 
-Under `security.pqfreebsd`:
+Under `security.pqfreebsd`. These are `CTLFLAG_RWTUN` and may also be set
+from `loader.conf(5)`:
 
 | Variable | Meaning |
 | --- | --- |
-| `enforcement` | 0 off, 1 on (`CTLFLAG_RWTUN`). `log(9)` `LOG_NOTICE` on change. |
+| `enforcement` | 0 off, 1 on. `log(9)` `LOG_NOTICE` on change. |
 | `audit` | Same conventions as `enforcement`. |
+
+### FILES
+
+`/boot/modules/pqfreebsd.ko` — the **pqfreebsd** kernel module.
 
 ### SEE ALSO
 
 [pqfreebsd_compat_zfs_multilabel(4)](#pqfreebsd_compat_zfs_multilabel4),
 `mac(4)`, `loader.conf(5)`, `kldload(8)`, `sysctl(8)`, `log(9)`
+
+### HISTORY
+
+The **pqfreebsd** module first appeared in pqk.
+
+### AUTHORS
+
+This module was written by Brian Fundakowski Feldman
+&lt;brianisbornagain@gmail.com&gt;.
 
 ---
 
@@ -62,14 +82,16 @@ with xattr enabled
 
 ### SYNOPSIS
 
-ZFS hosts only. Prefer `loader.conf(5)`:
+ZFS hosts only. To load the module at boot time, place the following lines
+in `loader.conf(5)`:
 
 ```
 pqfreebsd_load="YES"
 pqfreebsd_compat_zfs_multilabel_load="YES"
 ```
 
-Or at run time after [pqfreebsd(4)](#pqfreebsd4):
+Alternatively, to load the module at run time after
+[pqfreebsd(4)](#pqfreebsd4):
 
 ```
 kldload pqfreebsd_compat_zfs_multilabel
@@ -90,10 +112,25 @@ line. The handler is dropped in `MOD_QUIESCE`.
 Depends on `pqfreebsd` and `zfsctrl` via `MODULE_DEPEND`. pqfreebsd(4)
 does not load it; pqf skills or `loader(8)` do when ZFS is in play.
 
+### FILES
+
+`/boot/modules/pqfreebsd_compat_zfs_multilabel.ko` — the
+**pqfreebsd_compat_zfs_multilabel** kernel module.
+
 ### SEE ALSO
 
 [pqfreebsd(4)](#pqfreebsd4), `mac(4)`, `loader.conf(5)`, `kldload(8)`,
 `mount(8)`, `zfs(8)`, `log(9)`
+
+### HISTORY
+
+The **pqfreebsd_compat_zfs_multilabel** module first appeared in pqk as a
+ZFS-only accommodation until a proper `MNT_MULTILABEL` fix goes upstream.
+
+### AUTHORS
+
+This module was written by Brian Fundakowski Feldman
+&lt;brianisbornagain@gmail.com&gt;.
 
 ### BUGS
 

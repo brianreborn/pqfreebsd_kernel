@@ -1,25 +1,21 @@
-# Copyright (c) 2026 Brian Fundakowski Feldman.
-# Light-ware License — see LICENSE.
+# SPDX-License-Identifier: LicenseRef-Light-ware
 #
-# Top-level build for pqfreebsd_kernel.
+# Copyright (c) 2026 Brian Fundakowski Feldman
 #
-#   make
-#   make -C sys/modules/pqfreebsd_compat_zfs_multilabel
+# Top-level build for pqfreebsd_kernel (pqk).
 #
-# SYSDIR defaults to /usr/src/sys. Override if your FreeBSD source is elsewhere:
+#	make
+#	make SYSDIR=/path/to/sys
 #
-#   make SYSDIR=/path/to/sys
-#
-# Test-build with make clean all before check-in. Intended for recent
-# FreeBSD -RELEASE lines without per-release ifdefs for this VFS surface.
-# Style: sh tools/checkstyle.sh  (checkstyle9.pl, git diff --check, mandoc lint)
+# Test-build with make clean all before check-in.
+# Style: sh tools/checkstyle.sh
 
 .if defined(SYSDIR)
 .MAKEFLAGS: SYSDIR=${SYSDIR}
 .endif
 
-SUBDIR=	sys/modules
+SUBDIR=	sys/modules \
+	share/man
+SUBDIR_PARALLEL=
 
 .include <bsd.subdir.mk>
-
-# Manuals (optional): mandoc -T ascii man/man4/pqfreebsd.4

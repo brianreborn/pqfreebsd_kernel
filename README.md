@@ -21,10 +21,21 @@ Tiny FreeBSD KLDs for PQFreeBSD (**pqk**). **Not LLM-dependent.** **pqf skills**
 (the PQFreeBSD skill suite) use installed `.ko` files; they do not build this
 tree on demand.
 
-**Manuals:** [GitHub-readable](man/README.md). Canonical mdoc:
-[`pqfreebsd.4`](man/man4/pqfreebsd.4),
-[`pqfreebsd_compat_zfs_multilabel.4`](man/man4/pqfreebsd_compat_zfs_multilabel.4)
-(`mandoc -T ascii man/man4/pqfreebsd.4`).
+**Manuals:** [GitHub-readable](man/README.md). Canonical mdoc in
+[`share/man/man4/`](share/man/man4/)
+(`mandoc -T ascii share/man/man4/pqfreebsd.4`).
+
+## Layout (in-tree analog)
+
+Out-of-tree, but the same shape as `src/sys` plus `src/share/man/man4`:
+
+| Path | Role |
+| --- | --- |
+| `sys/pqfreebsd/` | Sources (like `sys/security/mac_*`) |
+| `sys/modules/<kmod>/` | `bsd.kmod.mk` wrappers; `.PATH` to `sys/pqfreebsd`, `SRCS=${KMOD}.c` |
+| `share/man/man4/` | Section 4 manuals (`bsd.prog.mk`) |
+
+`make install` drops `.ko` into `/boot/modules` (out-of-tree `KMODDIR`) and manuals into the system man tree.
 
 ## Required vs optional
 

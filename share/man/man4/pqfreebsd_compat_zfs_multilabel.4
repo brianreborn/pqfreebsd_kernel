@@ -1,5 +1,10 @@
-.\" Copyright (c) 2026 Brian Fundakowski Feldman.
+.\"
+.\" Copyright (c) 2026 Brian Fundakowski Feldman. All rights reserved.
+.\"
+.\" SPDX-License-Identifier: LicenseRef-Light-ware
+.\"
 .\" Light-ware License — see LICENSE at the repository root.
+.\"
 .Dd August 23, 2026
 .Dt PQFREEBSD_COMPAT_ZFS_MULTILABEL 4
 .Os
@@ -8,14 +13,14 @@
 .Nd set MNT_MULTILABEL on ZFS mounts with xattr enabled
 .Sh SYNOPSIS
 ZFS hosts only.
-Prefer
+To load the module at boot time, place the following lines in
 .Xr loader.conf 5 :
 .Bd -literal -offset indent
 pqfreebsd_load="YES"
 pqfreebsd_compat_zfs_multilabel_load="YES"
 .Ed
 .Pp
-Or at run time after
+Alternatively, to load the module at run time after
 .Xr pqfreebsd 4 :
 .Bd -literal -offset indent
 kldload pqfreebsd_compat_zfs_multilabel
@@ -65,6 +70,13 @@ does not load it;
 pqf skills or
 .Xr loader 8
 do when ZFS is in play.
+.Sh FILES
+.Bl -tag -width indent
+.It Pa /boot/modules/pqfreebsd_compat_zfs_multilabel.ko
+The
+.Nm
+kernel module.
+.El
 .Sh SEE ALSO
 .Xr mac 4 ,
 .Xr pqfreebsd 4 ,
@@ -73,11 +85,16 @@ do when ZFS is in play.
 .Xr mount 8 ,
 .Xr zfs 8 ,
 .Xr log 9
+.Sh HISTORY
+The
+.Nm
+module first appeared in pqk as a ZFS-only accommodation until a proper
+.Dv MNT_MULTILABEL
+fix goes upstream.
 .Sh AUTHORS
-.An Brian Fundakowski Feldman
-.Sh LICENSE
-Light-ware License.
-Copyright (c) 2026 Brian Fundakowski Feldman.
+.An -nosplit
+This module was written by
+.An Brian Fundakowski Feldman Aq Mt brianisbornagain@gmail.com .
 .Sh BUGS
 Does not clear
 .Dv MNT_MULTILABEL
