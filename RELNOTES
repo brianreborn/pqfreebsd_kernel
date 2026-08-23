@@ -60,3 +60,6 @@ c7b313101c0c:
 3887b8fb43db:
 	Add USAGE.md for sprint expense tracking from session telemetry;
 	reconcile with interactive /usage as the credit source of truth.
+
+37b0926b41eb:
+	Add pqfreebsd(4) and pqfreebsd_compat_zfs_multilabel(4) manuals.
