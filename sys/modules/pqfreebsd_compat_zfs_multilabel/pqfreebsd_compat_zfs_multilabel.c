@@ -24,6 +24,7 @@
 #include <sys/mount.h>
 #include <sys/queue.h>
 #include <sys/eventhandler.h>
+#include <sys/syslog.h>
 
 /* OpenZFS xattr index values; avoid CDDL headers. */
 #define	PQFREEBSD_XATTR_DIR	1
@@ -79,9 +80,10 @@ tag_mount(struct mount *mp)
 		mp->mnt_flag |= MNT_MULTILABEL;
 	MNT_IUNLOCK(mp);
 
-	/* One line per mount we actually modify — shows up in dmesg / messages. */
+	/* One line per mount we actually modify (syslog / message buffer). */
 	if (set)
-		printf("pqfreebsd_compat_zfs_multilabel: multilabel on %s (%s)\n",
+		log(LOG_INFO,
+		    "pqfreebsd_compat_zfs_multilabel: multilabel on %s (%s)\n",
 		    mp->mnt_stat.f_mntonname, mp->mnt_stat.f_mntfromname);
 }
 
@@ -142,7 +144,7 @@ pqfreebsd_compat_zfs_multilabel_modevent(module_t mod __unused, int type,
 		if (pqfreebsd_vfs_mounted_tag == NULL)
 			return (ENOMEM);
 		scan_zfs_mounts();
-		printf("pqfreebsd_compat_zfs_multilabel: loaded\n");
+		log(LOG_NOTICE, "pqfreebsd_compat_zfs_multilabel: loaded\n");
 		return (0);
 	case MOD_QUIESCE:
 	case MOD_SHUTDOWN:

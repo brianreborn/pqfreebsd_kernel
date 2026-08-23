@@ -19,6 +19,7 @@
 #include <sys/kernel.h>
 #include <sys/module.h>
 #include <sys/sysctl.h>
+#include <sys/syslog.h>
 
 #define	PQFREEBSD_STATE_ENFORCEMENT	1
 #define	PQFREEBSD_STATE_AUDIT		2
@@ -49,7 +50,7 @@ pqfreebsd_sysctl_state(SYSCTL_HANDLER_ARGS)
 	val = val ? 1 : 0;
 	if (val != *flagp) {
 		*flagp = val;
-		printf("pqfreebsd: %s %s\n", name,
+		log(LOG_NOTICE, "pqfreebsd: %s %s\n", name,
 		    val ? "enabled" : "disabled");
 	}
 	return (0);
@@ -76,14 +77,15 @@ pqfreebsd_modevent(module_t mod __unused, int type, void *data __unused)
 		 * Tunables may already have set the ints via CTLFLAG_RWTUN;
 		 * only force defaults when still zero at first load message.
 		 */
-		printf("pqfreebsd: loaded (enforcement=%s audit=%s)\n",
+		log(LOG_NOTICE, "pqfreebsd: loaded (enforcement=%s audit=%s)\n",
 		    pqfreebsd_enforcement ? "enabled" : "disabled",
 		    pqfreebsd_audit ? "enabled" : "disabled");
 		return (0);
 	case MOD_QUIESCE:
 		return (0);
 	case MOD_UNLOAD:
-		printf("pqfreebsd: unloaded (enforcement was %s audit was %s)\n",
+		log(LOG_NOTICE,
+		    "pqfreebsd: unloaded (enforcement was %s audit was %s)\n",
 		    pqfreebsd_enforcement ? "enabled" : "disabled",
 		    pqfreebsd_audit ? "enabled" : "disabled");
 		return (0);

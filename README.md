@@ -50,7 +50,7 @@ quietly from `onestart`. The **core module does not load compat KLDs**.
 
 | Module | Role |
 | --- | --- |
-| `pqfreebsd` | **Required** skeletal core. Suite **enforcement** / **audit** state (`security.pqfreebsd.*`); kernel messages on change. Does **not** load other `pqfreebsd_*` KLDs. |
+| `pqfreebsd` | **Required** skeletal core. Suite **enforcement** / **audit** state (`security.pqfreebsd.*`); `log(9)` on change. Does **not** load other `pqfreebsd_*` KLDs. |
 | `pqfreebsd_compat_zfs_multilabel` | **ZFS-only.** Not needed on legacy **UFS/FFS** — those already set `MNT_MULTILABEL` (the store predated ZFS and never had this regression). On ZFS: set `MNT_MULTILABEL` when effective `xattr` is `on`/`dir` or `sa`. `MODULE_DEPEND`s on `pqfreebsd` + `zfsctrl`. Suite loads it only when ZFS is in play. |
 
 ```
