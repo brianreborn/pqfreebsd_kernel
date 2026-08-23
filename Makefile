@@ -3,7 +3,7 @@
 # Top-level build for pqfreebsd_kernel.
 #
 #   make
-#   make -C sys/modules/pqk_zfs_ea
+#   make -C sys/modules/pqfreebsd_compat_zfs_multilabel
 #
 # SYSDIR defaults to /usr/src/sys. Override if your FreeBSD source is elsewhere:
 #

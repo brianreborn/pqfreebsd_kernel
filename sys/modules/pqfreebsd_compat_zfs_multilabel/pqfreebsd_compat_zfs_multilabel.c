@@ -23,13 +23,13 @@
 #include <sys/eventhandler.h>
 
 /* OpenZFS xattr index values; avoid CDDL headers. */
-#define	PQK_XATTR_DIR	1
-#define	PQK_XATTR_SA	2
+#define	PQFREEBSD_XATTR_DIR	1
+#define	PQFREEBSD_XATTR_SA	2
 
 /* From zfs.ko (zfsctrl). Effective prop; may sleep on spa_namespace_lock. */
 int dsl_prop_get_integer(const char *, const char *, uint64_t *, char *);
 
-static eventhandler_tag pqk_mounted_tag;
+static eventhandler_tag pqfreebsd_vfs_mounted_tag;
 
 static int
 opt_isset(struct mount *mp, const char *name)
@@ -57,7 +57,7 @@ xattr_enabled(struct mount *mp)
 		return (0);
 	if (dsl_prop_get_integer(from, "xattr", &xattr, NULL) != 0)
 		return (0);
-	return (xattr == PQK_XATTR_DIR || xattr == PQK_XATTR_SA);
+	return (xattr == PQFREEBSD_XATTR_DIR || xattr == PQFREEBSD_XATTR_SA);
 }
 
 static void
@@ -120,17 +120,18 @@ pqfreebsd_compat_zfs_multilabel_modevent(module_t mod __unused, int type,
 
 	switch (type) {
 	case MOD_LOAD:
-		pqk_mounted_tag = EVENTHANDLER_REGISTER(vfs_mounted,
+		pqfreebsd_vfs_mounted_tag = EVENTHANDLER_REGISTER(vfs_mounted,
 		    on_vfs_mounted, NULL, EVENTHANDLER_PRI_ANY);
-		if (pqk_mounted_tag == NULL)
+		if (pqfreebsd_vfs_mounted_tag == NULL)
 			return (ENOMEM);
 		scan_zfs_mounts();
 		printf("pqfreebsd_compat_zfs_multilabel: loaded\n");
 		return (0);
 	case MOD_UNLOAD:
-		if (pqk_mounted_tag != NULL) {
-			EVENTHANDLER_DEREGISTER(vfs_mounted, pqk_mounted_tag);
-			pqk_mounted_tag = NULL;
+		if (pqfreebsd_vfs_mounted_tag != NULL) {
+			EVENTHANDLER_DEREGISTER(vfs_mounted,
+			    pqfreebsd_vfs_mounted_tag);
+			pqfreebsd_vfs_mounted_tag = NULL;
 		}
 		return (0);
 	case MOD_SHUTDOWN:
