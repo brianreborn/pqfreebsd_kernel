@@ -76,3 +76,9 @@ c7b313101c0c:
 	Manuals moved to share/man/man4.  C and Makefiles carry SPDX
 	headers; pqfreebsd(4) and pqfreebsd_compat_zfs_multilabel(4)
 	use style.mdoc HISTORY/FILES/AUTHORS.  See pqfreebsd(4).
+
+8d3014597166:
+	pqfreebsd_compat_zfs_multilabel.ko no longer references
+	dsl_prop_get_integer (not exported from zfs.ko).  ZFS mounts
+	get MNT_MULTILABEL unless noxattr is set; OpenZFS default is
+	xattr on.  See pqfreebsd_compat_zfs_multilabel(4).
