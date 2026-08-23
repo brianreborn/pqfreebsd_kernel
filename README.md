@@ -4,7 +4,9 @@
 **License: [Light-ware](LICENSE).** See **[NOTICE.md](NOTICE.md)**.  
 **Release / install continuity:** see **[RELEASE_NOTES.md](RELEASE_NOTES.md)**
 (half-installed PQFreeBSD test host; where a master project should place this
-tree).
+tree).  
+**Sprint expenses:** see **[USAGE.md](USAGE.md)** (from session `/usage`
+telemetry).
 
 **pqk** is an accepted short name for this tree: *Public Quantum Free Berkeley
 Software Distribution Kernel* (PQFreeBSD kernel). Loadable module names still
