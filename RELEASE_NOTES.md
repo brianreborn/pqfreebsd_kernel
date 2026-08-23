@@ -26,8 +26,8 @@ When a master / umbrella project **imbibes** these repos, keep roles separate:
 
 | Repo | Place in the master layout | Do not |
 | --- | --- | --- |
-| `brianreborn/pqfreebsd_kernel` | **Kernel deliverable** — build/install like other out-of-tree KLDs (`make` / `make install` into the module path, or a ports/package later). Sibling to the skill tree, not inside it. | Do not vendor into `/create-skill` or `skills/`; do not build on demand per skill run. |
-| `brianreborn/pqfreebsd` | **Skill + userland suite** (plugin / result dir / port). Loads installed `.ko` on every service start (boot), during install/stage, and via `onestart`. | Do not compile KLDs from the skill. |
+| `brianreborn/pqfreebsd_kernel` (**pqk**) | **Kernel deliverable** — not LLM-dependent. Build/install like other out-of-tree KLDs. Sibling to pqf skills, not inside them. | Do not vendor into `/create-skill` or `skills/`; pqf skills must not build this on demand. |
+| `brianreborn/pqfreebsd` (**pqf skills**) | Skill suite + userland (plugin / result dir / port). Loads installed `.ko` on every start/boot/install/stage. | Do not compile KLDs from pqf skills. |
 
 **Load rules the master must preserve:**
 

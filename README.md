@@ -10,7 +10,9 @@ tree).
 Software Distribution Kernel* (PQFreeBSD kernel). Loadable module names still
 use the `pqfreebsd` / `pqfreebsd_*` family so they match the suite.
 
-Tiny FreeBSD KLDs for PQFreeBSD. Skills do not build this tree on demand.
+Tiny FreeBSD KLDs for PQFreeBSD (**pqk**). **Not LLM-dependent.** **pqf skills**
+(the PQFreeBSD skill suite) use installed `.ko` files; they do not build this
+tree on demand.
 
 ## Required vs optional
 

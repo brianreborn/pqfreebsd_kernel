@@ -50,7 +50,8 @@ compat module.
 
 ## Integration policy
 
-Separate kernel deliverable — not vendored into create-skill trees, not
-built on demand by skills. The **userland suite** loads installed `.ko`
-files on every service start (boot), during install/stage, and via `onestart`; the core module does **not** load compat
-KLDs. Do not have unrelated projects integrate this tree yet.
+Separate kernel deliverable — **not LLM-dependent**. Not vendored into
+create-skill trees; not built on demand by **pqf skills**. The **pqf**
+userland suite loads installed `.ko` files on every service start (boot),
+during install/stage, and via `onestart`; the core module does **not** load
+compat KLDs. Do not have unrelated projects integrate this tree yet.
