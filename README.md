@@ -103,9 +103,8 @@ make install
 **Before check-in:** `make clean all` (and a second `SYSDIR` when available),
 then commit. Do not push untested `.c` changes.
 
-Suite load (userland — not the core KLD): every **`start` (boot)**,
-**install**, and **stage** call `_pqfreebsd_kld_load` and ensure
-`/boot/loader.conf.local` has:
+**Ideally preloaded by loader(8)** every boot. pqf skills write
+`/boot/loader.conf.local` on install/stage/start:
 
 ```
 pqfreebsd_load="YES"
@@ -113,6 +112,7 @@ pqfreebsd_load="YES"
 pqfreebsd_compat_zfs_multilabel_load="YES"
 ```
 
-Not limited to `onestart`.
+`kldload` is only a same-session fallback until reboot — not the preferred
+steady-state path.
 
 Pin: `git ls-remote https://github.com/brianreborn/pqfreebsd_kernel.git HEAD`
