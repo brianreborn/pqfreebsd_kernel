@@ -29,6 +29,10 @@ PQFreeBSD (today: ZFS not advertising `MNT_MULTILABEL`). The proper fix is
 upstream. These KLDs exist so PQFreeBSD can keep working **without** asking
 operators to perform special steps or compromise suite functionality.
 
+**Now:** mid-install blocker while validating a PQFreeBSD host. Related
+pain (e.g. `su` failing) is tracked as a separate symptom that may clear once
+labels stick on ZFS — not as a second responsibility of this module.
+
 ## Integration policy
 
 Separate kernel deliverable — not vendored into create-skill trees, not

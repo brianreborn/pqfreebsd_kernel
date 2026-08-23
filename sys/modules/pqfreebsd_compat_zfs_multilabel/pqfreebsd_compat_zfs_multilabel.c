@@ -3,10 +3,13 @@
  * Light-ware License — see LICENSE at the repository root.
  *
  * Compat for a trivial OpenZFS/FreeBSD bug: ZFS mounts do not set
- * MNT_MULTILABEL (UFS does). Proper fix is upstream. Until then, on load
- * and on each new mount, if effective xattr is on/dir or sa (local or
+ * MNT_MULTILABEL (UFS does). Proper fix is upstream. Current mid-install
+ * blocker for pqfreebsd while hunting bugs of this class. Until then, on
+ * load and on each new mount, if effective xattr is on/dir or sa (local or
  * inherited), set MNT_MULTILABEL so MAC can store labels as EAs.
  * Loaded quietly by PQFreeBSD onestart when installed — no operator ritual.
+ * su/login oddities on the same box are not this module's job; they may
+ * clear once labels can stick.
  */
 
 #include <sys/param.h>
