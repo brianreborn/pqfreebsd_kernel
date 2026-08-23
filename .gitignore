@@ -16,6 +16,7 @@ amd64
 .modules.depend
 export_syms
 vnode_if.*
+vnode_if*.h
 opt_*.h
 *.S
 *.pico

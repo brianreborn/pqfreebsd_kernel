@@ -9,9 +9,11 @@
 /*
  * ZFS-only compat.  Legacy UFS/FFS already sets MNT_MULTILABEL and never
  * had this regression.  OpenZFS mounts omit the flag; a proper fix will go
- * upstream.  On load and each new mount, if effective xattr is on/dir or
- * sa (local or inherited), set MNT_MULTILABEL so MAC can store labels as
- * EAs.  Suite/loader load this only when ZFS is in play.
+ * upstream.  On load and each new mount, set MNT_MULTILABEL unless the
+ * mount has noxattr.  Do not call into zfs.ko: it exports no KPI for the
+ * inherited xattr property (dsl_prop_get_integer is local).  OpenZFS
+ * default is xattr on (dir or sa).  Suite/loader load this only when ZFS
+ * is in play.
  *
  * Eventhandler teardown follows siftr(4)/alq(9): drop the handler in
  * MOD_QUIESCE before MOD_UNLOAD.  Mount walk matches g_journal /
@@ -30,12 +32,6 @@
 #include <sys/syslog.h>
 #include <sys/vnode.h>
 
-#include "pqfreebsd_zfs_prop.h"
-
-/* OpenZFS xattr index values; avoid CDDL headers. */
-#define	PQFREEBSD_XATTR_DIR	1
-#define	PQFREEBSD_XATTR_SA	2
-
 static eventhandler_tag pqfreebsd_vfs_mounted_tag = NULL;
 
 static int
@@ -50,21 +46,15 @@ opt_isset(struct mount *mp, const char *name)
 static int
 xattr_enabled(struct mount *mp)
 {
-	uint64_t xattr;
-	const char *from;
 
 	if (opt_isset(mp, "noxattr"))
 		return (0);
-	if (opt_isset(mp, "saxattr") || opt_isset(mp, "dirxattr") ||
-	    opt_isset(mp, "xattr"))
-		return (1);
-
-	from = mp->mnt_stat.f_mntfromname;
-	if (from[0] == '\0')
-		return (0);
-	if (dsl_prop_get_integer(from, "xattr", &xattr, NULL) != 0)
-		return (0);
-	return (xattr == PQFREEBSD_XATTR_DIR || xattr == PQFREEBSD_XATTR_SA);
+	/*
+	 * saxattr / dirxattr / xattr mean on.  OpenZFS does not copy the
+	 * inherited property into mnt_opt, and zfs.ko does not export
+	 * dsl_prop_get_integer.  Default is xattr on.
+	 */
+	return (1);
 }
 
 static void
@@ -91,7 +81,6 @@ tag_mount(struct mount *mp)
 
 /*
  * mountlist_mtx + vfs_busy(MBF_NOWAIT|MBF_MNTLSTLOCK).
- * Drop list lock before dsl_prop_get_integer (may sleep).
  */
 static void
 scan_zfs_mounts(void)

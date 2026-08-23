@@ -36,15 +36,17 @@ project
 Legacy UFS/FFS already sets
 .Dv MNT_MULTILABEL
 and never had this regression.
-OpenZFS mounts that omit the flag receive it when the effective
+OpenZFS mounts that omit the flag receive it unless the mount has
+.Cm noxattr .
+The inherited
 .Cm xattr
-property is
-.Cm on
-.Pq also
-.Cm dir
-or
-.Cm sa
-.Pq local or inherited .
+property is not readable from another KLD:
+.Nm zfs.ko
+does not export
+.Fn dsl_prop_get_integer .
+OpenZFS default is
+.Cm xattr
+on.
 A proper fix will go upstream.
 .Pp
 On
@@ -102,3 +104,8 @@ on unload.
 Remounts that change
 .Cm xattr
 are not observed until reload or a new mount.
+Datasets with
+.Cm xattr=off
+and no
+.Cm noxattr
+mount option are treated as enabled.

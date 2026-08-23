@@ -7,8 +7,7 @@ SRC=${SRCTOP:-/usr/src}
 CHECK=${SRC}/tools/build/checkstyle9.pl
 st=0
 CSRC="sys/pqfreebsd/pqfreebsd.c \
-	sys/pqfreebsd/pqfreebsd_compat_zfs_multilabel.c \
-	sys/pqfreebsd/pqfreebsd_zfs_prop.h"
+	sys/pqfreebsd/pqfreebsd_compat_zfs_multilabel.c"
 
 echo "==> checkstyle9.pl (style(9))"
 if [ -f "$CHECK" ]; then

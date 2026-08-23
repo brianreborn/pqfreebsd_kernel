@@ -101,9 +101,10 @@ kldload pqfreebsd_compat_zfs_multilabel
 
 ZFS-only compat for the pqfreebsd project (pqk). Legacy UFS/FFS already
 sets `MNT_MULTILABEL` and never had this regression. OpenZFS mounts that
-omit the flag receive it when the effective **xattr** property is **on**
-(also **dir**) or **sa** (local or inherited). A proper fix will go
-upstream.
+omit the flag receive it unless the mount has **noxattr**. The inherited
+**xattr** property is not readable from another KLD (`zfs.ko` does not
+export `dsl_prop_get_integer()`). OpenZFS default is **xattr** on. A
+proper fix will go upstream.
 
 On `MOD_LOAD` the module registers a `vfs_mounted` handler and scans
 active ZFS mounts. Each mount newly marked emits a `log(9)` `LOG_INFO`
@@ -135,7 +136,8 @@ This module was written by Brian Fundakowski Feldman
 ### BUGS
 
 Does not clear `MNT_MULTILABEL` on unload. Remounts that change **xattr**
-are not observed until reload or a new mount.
+are not observed until reload or a new mount. Datasets with **xattr=off**
+and no **noxattr** mount option are treated as enabled.
 
 ---
 
