@@ -63,3 +63,8 @@ c7b313101c0c:
 
 37b0926b41eb:
 	Add pqfreebsd(4) and pqfreebsd_compat_zfs_multilabel(4) manuals.
+
+51c8ff87551c:
+	Add tools/checkstyle.sh (checkstyle9.pl, mandoc -T lint).
+	Move dsl_prop_get_integer prototype to pqfreebsd_zfs_prop.h per
+	style(9) (no externs in .c files).
