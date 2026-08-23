@@ -2,8 +2,8 @@
 
 **This GitHub repository is public.**
 
-All files in this distribution — including kernel modules, manuals, and
-this notice — are:
+All files in this distribution — including kernel modules and this
+notice — are:
 
 **Copyright © 2026 Brian Fundakowski Feldman. All rights reserved.**
 
